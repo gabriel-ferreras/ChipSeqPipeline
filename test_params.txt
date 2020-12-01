@@ -1,10 +1,8 @@
-experiment_name: polycomb
-number_samples: 4
+experiment_name: k27
+number_samples: 2
 installation_directory: /home/gabfergar/github_repositories/
 working_directory: /home/gabfergar/tmp/ 
-path_annotation: /home/gabfergar/rnaseqdata/chr5.gtf
-path_genome: /home/gabfergar/rnaseqdata/chr5.fa
-path_sample_1: /home/gabfergar/rnaseqdata/col0_7dag_chr5_1.fastq.gz
-path_sample_2: /home/gabfergar/rnaseqdata/col0_7dag_chr5_2.fastq.gz
-path_sample_3: /home/gabfergar/rnaseqdata/abc_7dag_chr5_1.fastq.gz
-path_sample_4: /home/gabfergar/rnaseqdata/abc_7dag_chr5_2.fastq.gz
+path_annotation: /home/gabfergar/k27/chr5.gtf.gz
+path_genome: /home/gabfergar/k27/chr5.fa.gz
+path_sample_1: /home/gabfergar/k27/col_0_h3k27me3_7dag_1_chr5.fastq.gz
+path_sample_2: /home/gabfergar/k27/input_chr5.fastq.gz
