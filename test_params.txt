@@ -1,8 +1,9 @@
-experiment_name: k27
-number_samples: 2
+experiment_name: prr5
+number_samples: 1
 installation_directory: /home/gabfergar/github_repositories/
 working_directory: /home/gabfergar/tmp/ 
-path_annotation: /home/gabfergar/k27/chr5.gtf.gz
-path_genome: /home/gabfergar/k27/chr5.fa.gz
-path_sample_1: /home/gabfergar/k27/col_0_h3k27me3_7dag_1_chr5.fastq.gz
-path_sample_2: /home/gabfergar/k27/input_chr5.fastq.gz
+path_annotation: /home/gabfergar/prr5/annotation/chromosome1.gtf
+path_genome: /home/gabfergar/prr5/genome/chromosome1.fa
+path_chip_1: /home/gabfergar/prr5/samples/chip/chip_prr5_chr1.fq.gz
+path_control_1: /home/gabfergar/prr5/samples/input/input_prr5_chr1.fq.gz
+broad: 1

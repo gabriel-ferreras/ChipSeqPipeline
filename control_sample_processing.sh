@@ -11,33 +11,34 @@ EXP=$5
 BROAD=$6
 
 echo ""
-qecho "=========================="
-echo "|   PROCESSING CHIP $i   |"
-echo "=========================="
+echo "============================="
+echo "|   PROCESSING CONTROL $i   |"
+echo "============================="
 echo ""
 
 cd $SAMPLE_DIR
 
 ## Sample quality control and read mapping to reference genome
-fastqc chip_$i.fastq.gz
-bowtie2 -x ../../genome/index -U chip_$i.fastq.gz -S chip_$i.sam
+fastqc control_$i.fastq.gz
+bowtie2 -x ../../genome/index -U control_$i.fastq.gz -S control_$i.sam
 
 ## Generating sorted bam file
-samtools sort -o chip_$i.bam chip_$i.sam
-rm chip_$i.sam
+samtools sort -o control_$i.bam control_$i.sam
+rm control_$i.sam
 rm *.fastq.gz
-samtools index chip_$i.bam
+samtools index control_$i.bam
 
 echo ""
-echo "   Chip $i processing DONE!!"
+echo "   Control $i processing DONE!!"
 echo ""
 
 ## Communication with blackboard.
-echo "Processing Chip $i done!" >> ../../results/blackboard.txt
+echo "Processing Control $i done!" >> ../../results/blackboard.txt
 NUM_PROC=$(wc -l ../../results/blackboard.txt | awk '{ print $1 }')
 TOTAL_PROC=$((${NUM_SAMPLES}*2))
 
 cd ../../results
+
 if [ $NUM_PROC -eq $TOTAL_PROC ]
 then
 	echo ""

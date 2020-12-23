@@ -30,19 +30,32 @@ echo "      Experiment name = "$EXP
 NUM_SAMPLES=$(grep number_samples: $PARAMS | awk '{ print $2 }')
 echo "      Number samples = "$NUM_SAMPLES
 
+BROAD=$(grep broad: $PARAMS | awk '{ print $2 }')
+echo "      Broad peaks = "$BROAD
+
 ANNOTATION=$(grep path_annotation: $PARAMS | awk '{ print $2 }')
 echo "      Annotation in "$ANNOTATION
 
 GENOME=$(grep path_genome: $PARAMS | awk '{ print $2 }')
 echo "      Genome in "$GENOME
 
-SAMPLES=()
+CHIPS=()
 i=0
 while [ $i -lt $NUM_SAMPLES ]
 do
         j=$(( $i + 1 ))
-        SAMPLES[$i]=$(grep path_sample_$j: $PARAMS | awk '{ print $2 }')
-        echo "      Sample $j in ${SAMPLES[$i]}"
+        CHIPS[$i]=$(grep path_chip_$j: $PARAMS | awk '{ print $2 }')
+        echo "      Chip $j in ${CHIPS[$i]}"
+        ((i++))
+done
+
+CONTROLS=()
+i=0
+while [ $i -lt $NUM_SAMPLES ]
+do
+        j=$(( $i + 1 ))
+        CONTROLS[$i]=$(grep path_control_$j: $PARAMS | awk '{ print $2 }')
+        echo "      Control $j in ${CONTROLS[$i]}"
         ((i++))
 done
 
@@ -60,7 +73,8 @@ cd samples
 i=1
 while [ $i -le $NUM_SAMPLES ]
 do
-        mkdir sample_$i
+        mkdir chip_$i
+	mkdir control_$i
         ((i++))
 done
 cd ..
@@ -72,7 +86,8 @@ i=1
 while [ $i -le $NUM_SAMPLES ]
 do
         j=$((i - 1))
-        cp ${SAMPLES[j]} $WORK_DIR/$EXP/samples/sample_$i/sample_$i.fastq.gz
+        cp ${CHIPS[j]} $WORK_DIR/$EXP/samples/chip_$i/chip_$i.fastq.gz
+	cp ${CONTROLS[j]} $WORK_DIR/$EXP/samples/control_$i/control_$i.fastq.gz
         ((i++))
 done
 
@@ -98,6 +113,9 @@ cd ../results
 i=1
 while [ $i -le $NUM_SAMPLES ]
 do
-        qsub -o sample_$i -N sample_$i $INS_DIR/ChipSeqPipeline/chip_sample_processing.sh $WORK_DIR/$EXP/samples/sample_$i $i $NUM_SAMPLES $INS_DIR $EXP
-        ((i++))
+        echo "Sent to processing chip $i"
+	qsub -o chip_$i -N chip_$i $INS_DIR/ChipSeqPipeline/chip_sample_processing.sh $WORK_DIR/$EXP/samples/chip_$i $i $NUM_SAMPLES $INS_DIR $EXP $BROAD
+        echo "Sent to processing control $i"
+	qsub -o control_$i -N control_$i $INS_DIR/ChipSeqPipeline/control_sample_processing.sh $WORK_DIR/$EXP/samples/control_$i $i $NUM_SAMPLES $INS_DIR $EXP $BROAD
+	((i++))
 done
