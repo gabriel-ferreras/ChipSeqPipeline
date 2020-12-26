@@ -6,4 +6,4 @@ path_annotation: /home/gabfergar/prr5/annotation/chromosome1.gtf
 path_genome: /home/gabfergar/prr5/genome/chromosome1.fa
 path_chip_1: /home/gabfergar/prr5/samples/chip/chip_prr5_chr1.fq.gz
 path_control_1: /home/gabfergar/prr5/samples/input/input_prr5_chr1.fq.gz
-broad: 1
+broad: 0

@@ -7,6 +7,7 @@ RES_DIR=$1
 NUM_SAMPLES=$2
 EXP=$3
 BROAD=$4
+INS_DIR=$5
 
 ## Accessing results folder
 cd $RES_DIR
@@ -24,7 +25,7 @@ then
 	while [ $i -le $NUM_SAMPLES ]
 	do
 		echo ""
-		echo " Determining NARROW peaks"
+		echo " Determining NARROW peaks for sample $i"
 		echo ""
         	macs2 callpeak -t ../samples/chip_$i/chip_$i.bam -c ../samples/control_$i/control_$i.bam -f BAM --outdir . -n ${EXP}_sample_$i
         	((i++))
@@ -35,11 +36,41 @@ else
 	while [ $i -le $NUM_SAMPLES ]
 	do
 		echo ""
-		echo " Determining BROAD peaks"
+		echo " Determining BROAD peaks for sample $i"
 		echo ""
         	macs2 callpeak -t ../samples/chip_$i/chip_$i.bam -c ../samples/control_$i/control_$i.bam -f BAM --outdir . -n ${EXP}_sample_$i --broad
         	((i++))
 	done
+fi
+
+echo ""
+echo "==============================================="
+echo "|   INITIATING R SCRIPT FOR PEAK ANNOTATION   |"
+echo "==============================================="
+echo ""
+
+if [ $BROAD -eq 0 ]
+then
+        i=1
+        while [ $i -le $NUM_SAMPLES ]
+        do
+                echo ""
+                echo " Annotating NARROW peaks for sample $i"
+                echo ""
+                Rscript ${INS_DIR}/ChipSeqPipeline/target_genes.R ${EXP}_sample_${i}_peaks.narrowPeak ${EXP}_sample_${i}_summits.bed 1000 1000 ${EXP}_sample_${i}_peaks_targetgenes.txt ${EXP}_sample_${i}_summits_targetgenes.txt
+                ((i++))
+        done
+
+else
+        i=1
+        while [ $i -le $NUM_SAMPLES ]
+        do
+                echo ""
+                echo " Annotating BROAD peaks for sample $i"
+                echo ""
+                Rscript ${INS_DIR}/ChipSeqPipeline/target_genes.R ${EXP}_sample_${i}_peaks.broadPeak ${EXP}_sample_${i}_summits.bed 1000 1000 ${EXP}_sample_${i}_peaks_targetgenes.txt ${EXP}_sample_${i}_summits_targetgenes.txt
+                ((i++))
+        done
 fi
 
 echo ""
