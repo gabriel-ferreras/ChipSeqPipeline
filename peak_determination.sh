@@ -8,6 +8,10 @@ NUM_SAMPLES=$2
 EXP=$3
 BROAD=$4
 INS_DIR=$5
+UPSTREAM=$6
+DOWNSTREAM=$7
+MOTIFLENGTH=$8
+MOTIFSIZE=$9
 
 ## Accessing results folder
 cd $RES_DIR
@@ -57,7 +61,7 @@ then
                 echo ""
                 echo " Annotating NARROW peaks for sample $i"
                 echo ""
-                Rscript ${INS_DIR}/ChipSeqPipeline/target_genes.R ${EXP}_sample_${i}_peaks.narrowPeak ${EXP}_sample_${i}_summits.bed 1000 1000 ${EXP}_sample_${i}_peaks_targetgenes.txt ${EXP}_sample_${i}_summits_targetgenes.txt
+                Rscript ${INS_DIR}/ChipSeqPipeline/target_genes.R ${EXP}_sample_${i}_peaks.narrowPeak ${EXP}_sample_${i}_summits.bed $UPSTREAM $DOWNSTREAM ${EXP}_sample_${i}_peaks_targetgenes.txt ${EXP}_sample_${i}_summits_targetgenes.txt
                 ((i++))
         done
 
@@ -68,10 +72,29 @@ else
                 echo ""
                 echo " Annotating BROAD peaks for sample $i"
                 echo ""
-                Rscript ${INS_DIR}/ChipSeqPipeline/target_genes.R ${EXP}_sample_${i}_peaks.broadPeak ${EXP}_sample_${i}_summits.bed 1000 1000 ${EXP}_sample_${i}_peaks_targetgenes.txt ${EXP}_sample_${i}_summits_targetgenes.txt
+                Rscript ${INS_DIR}/ChipSeqPipeline/target_genes.R ${EXP}_sample_${i}_peaks.broadPeak ${EXP}_sample_${i}_summits.bed $UPSTREAM $DOWNSTREAM ${EXP}_sample_${i}_peaks_targetgenes.txt ${EXP}_sample_${i}_summits_targetgenes.txt
                 ((i++))
         done
 fi
+
+echo ""
+echo "==========================="
+echo "|   HOMER MOTIF FINDING   |"
+echo "==========================="
+echo ""
+
+i=1
+while [ $i -le $NUM_SAMPLES ]
+do
+	echo ""
+	echo " Finding motives for sample $i"
+	echo ""
+	mkdir motifs_sample_${i}
+	cd motifs_sample_${i}
+	findMotifsGenome.pl ../${EXP}_sample_${i}_summits.bed tair10 . -len $MOTIFLENGTH -size $MOTIFSIZE
+	((i++))
+	cd ..
+done
 
 echo ""
 echo "Analysis complete!!"

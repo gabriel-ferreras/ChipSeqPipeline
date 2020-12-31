@@ -9,6 +9,11 @@ NUM_SAMPLES=$3
 INS_DIR=$4
 EXP=$5
 BROAD=$6
+PAIRED=$7
+UPSTREAM=$8
+DOWNSTREAM=$9
+MOTIFLENGTH=${10}
+MOTIFSIZE=${11}
 
 echo ""
 qecho "=========================="
@@ -21,6 +26,15 @@ cd $SAMPLE_DIR
 ## Sample quality control and read mapping to reference genome
 fastqc chip_$i.fastq.gz
 bowtie2 -x ../../genome/index -U chip_$i.fastq.gz -S chip_$i.sam
+if [ $PAIRED -eq 0 ]
+then
+        fastqc chip_$i.fastq.gz
+        bowtie2 -x ../../genome/index -U chip_$i.fastq.gz -S chip_$i.sam
+else
+	fastqc chip_${1}_1.fastq.gz
+        fastqc chip_${1}_2.fastq.gz
+        bowtie2 -x ../../genome/index -1 chip_${i}_1.fastq.gz -2 chip_${i}_2.fastq.gz -S chip_$i.sam
+fi
 
 ## Generating sorted bam file
 samtools sort -o chip_$i.bam chip_$i.sam
@@ -43,5 +57,5 @@ then
 	echo ""
 	echo "   Continuing with peak determination, you are almost done!"
 	echo ""
-	qsub -o peaks -N peaks $INS_DIR/ChipSeqPipeline/peak_determination.sh $SAMPLE_DIR/../../results $NUM_SAMPLES $EXP $BROAD $INS_DIR
+	qsub -o peaks -N peaks $INS_DIR/ChipSeqPipeline/peak_determination.sh $SAMPLE_DIR/../../results $NUM_SAMPLES $EXP $BROAD $INS_DIR $UPSTREAM $DOWNSTREAM $MOTIFLENGTH $MOTIFSIZE
 fi

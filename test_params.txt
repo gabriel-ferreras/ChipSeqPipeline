@@ -4,6 +4,11 @@ installation_directory: /home/gabfergar/github_repositories/
 working_directory: /home/gabfergar/tmp/ 
 path_annotation: /home/gabfergar/prr5/annotation/chromosome1.gtf
 path_genome: /home/gabfergar/prr5/genome/chromosome1.fa
+paired: 0
 path_chip_1: /home/gabfergar/prr5/samples/chip/chip_prr5_chr1.fq.gz
 path_control_1: /home/gabfergar/prr5/samples/input/input_prr5_chr1.fq.gz
 broad: 0
+upstream_limit: 1000
+downstream_limit: 1000
+motif_length: 8
+motif_size: 100
