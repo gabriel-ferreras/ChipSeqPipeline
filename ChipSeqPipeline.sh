@@ -77,7 +77,6 @@ then
 	done
 
 else
-	echo "NON PAIRED READING"
 	CHIPS=()
         i=0
         while [ $i -lt $NUM_SAMPLES ]
