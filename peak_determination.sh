@@ -12,6 +12,9 @@ UPSTREAM=$6
 DOWNSTREAM=$7
 MOTIFLENGTH=$8
 MOTIFSIZE=$9
+NUM_EXP=${10}
+EXP_DESIGN=${11}
+j=${12}
 
 ## Accessing results folder
 cd $RES_DIR

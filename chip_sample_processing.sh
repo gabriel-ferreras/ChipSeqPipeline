@@ -14,6 +14,8 @@ UPSTREAM=$8
 DOWNSTREAM=$9
 MOTIFLENGTH=${10}
 MOTIFSIZE=${11}
+NUM_EXP=${12}
+EXP_DESIGN=${13}
 
 echo ""
 echo "=========================="
@@ -52,8 +54,12 @@ TOTAL_PROC=$((${NUM_SAMPLES}*2))
 cd ../../results
 if [ $NUM_PROC -eq $TOTAL_PROC ]
 then
-	echo ""
-	echo "   Continuing with peak determination, you are almost done!"
-	echo ""
-	qsub -o peaks -N peaks $INS_DIR/ChipSeqPipeline/peak_determination.sh $SAMPLE_DIR/../../results $NUM_SAMPLES $EXP $BROAD $INS_DIR $UPSTREAM $DOWNSTREAM $MOTIFLENGTH $MOTIFSIZE
+	j=1
+	while[ $j -le $NUM_SAMPLES ]
+	do
+		echo ""
+		echo "   Continuing with peak determination of sample $j, it is almost done!"
+		echo ""
+		qsub -o peaks -N peaks $INS_DIR/ChipSeqPipeline/peak_determination.sh $SAMPLE_DIR/../../results $NUM_SAMPLES $EXP $BROAD $INS_DIR $UPSTREAM $DOWNSTREAM $MOTIFLENGTH $MOTIFSIZE $NUM_EXP $EXP_DESIGN $j
+		((j++))
 fi

@@ -54,6 +54,12 @@ echo "      Selected motif size is "$MOTIFSIZE
 PAIRED=$(grep paired: $PARAMS | awk '{ print $2 }')
 echo "      Paired-end lectures = "$PAIRED
 
+NUM_EXP=$(grep number_experiments: $PARAMS | awk '{ print $2 }')
+echo "      Number of experiments = "$NUM_EXP
+
+EXP_DESIGN=$(grep experimental_design: $PARAMS | awk '{ print $2 }')
+echo "      Experimental design =" $EXP_DESIGN
+
 if [ $PAIRED -eq 0 ]
 then
 	CHIPS=()
@@ -173,8 +179,8 @@ i=1
 while [ $i -le $NUM_SAMPLES ]
 do
         echo "Sent to processing chip $i"
-	qsub -o chip_$i -N chip_$i $INS_DIR/ChipSeqPipeline/chip_sample_processing.sh $WORK_DIR/$EXP/samples/chip_$i $i $NUM_SAMPLES $INS_DIR $EXP $BROAD $PAIRED $UPSTREAM $DOWNSTREAM $MOTIFLENGTH $MOTIFSIZE
+	qsub -o chip_$i -N chip_$i $INS_DIR/ChipSeqPipeline/chip_sample_processing.sh $WORK_DIR/$EXP/samples/chip_$i $i $NUM_SAMPLES $INS_DIR $EXP $BROAD $PAIRED $UPSTREAM $DOWNSTREAM $MOTIFLENGTH $MOTIFSIZE $NUM_EXP $EXP_DESIGN
         echo "Sent to processing control $i"
-	qsub -o control_$i -N control_$i $INS_DIR/ChipSeqPipeline/control_sample_processing.sh $WORK_DIR/$EXP/samples/control_$i $i $NUM_SAMPLES $INS_DIR $EXP $BROAD $PAIRED $UPSTREAM $DOWNSTREAM $MOTIFLENGTH $MOTIFSIZE
+	qsub -o control_$i -N control_$i $INS_DIR/ChipSeqPipeline/control_sample_processing.sh $WORK_DIR/$EXP/samples/control_$i $i $NUM_SAMPLES $INS_DIR $EXP $BROAD $PAIRED $UPSTREAM $DOWNSTREAM $MOTIFLENGTH $MOTIFSIZE $NUM_EXP $EXP_DESIGN
 	((i++))
 done
