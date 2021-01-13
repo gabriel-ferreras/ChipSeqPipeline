@@ -24,15 +24,13 @@ echo ""
 cd $SAMPLE_DIR
 
 ## Sample quality control and read mapping to reference genome
-fastqc chip_$i.fastq.gz
-bowtie2 -x ../../genome/index -U chip_$i.fastq.gz -S chip_$i.sam
 if [ $PAIRED -eq 0 ]
 then
         fastqc chip_$i.fastq.gz
         bowtie2 -x ../../genome/index -U chip_$i.fastq.gz -S chip_$i.sam
 else
-	fastqc chip_${1}_1.fastq.gz
-        fastqc chip_${1}_2.fastq.gz
+	fastqc chip_${i}_1.fastq.gz
+        fastqc chip_${i}_2.fastq.gz
         bowtie2 -x ../../genome/index -1 chip_${i}_1.fastq.gz -2 chip_${i}_2.fastq.gz -S chip_$i.sam
 fi
 
