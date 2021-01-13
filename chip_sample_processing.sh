@@ -16,7 +16,7 @@ MOTIFLENGTH=${10}
 MOTIFSIZE=${11}
 
 echo ""
-qecho "=========================="
+echo "=========================="
 echo "|   PROCESSING CHIP $i   |"
 echo "=========================="
 echo ""
