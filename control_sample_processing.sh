@@ -47,9 +47,9 @@ echo ""
 echo "   Control $i processing DONE!!"
 echo ""
 
-## Communication with blackboard.
-echo "Processing Control $i done!" >> ../../results/blackboard.txt
-NUM_PROC=$(wc -l ../../results/blackboard.txt | awk '{ print $1 }')
+## Communication with blackboard_1.
+echo "Processing Control $i done!" >> ../../results/blackboard_1.txt
+NUM_PROC=$(wc -l ../../results/blackboard_1.txt | awk '{ print $1 }')
 TOTAL_PROC=$((${NUM_SAMPLES}*2))
 
 cd ../../results

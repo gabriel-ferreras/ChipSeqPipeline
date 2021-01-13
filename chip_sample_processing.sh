@@ -46,16 +46,16 @@ echo ""
 echo "   Chip $i processing DONE!!"
 echo ""
 
-## Communication with blackboard.
-echo "Processing Chip $i done!" >> ../../results/blackboard.txt
-NUM_PROC=$(wc -l ../../results/blackboard.txt | awk '{ print $1 }')
+## Communication with blackboard_1.
+echo "Processing Chip $i done!" >> ../../results/blackboard_1.txt
+NUM_PROC=$(wc -l ../../results/blackboard_1.txt | awk '{ print $1 }')
 TOTAL_PROC=$((${NUM_SAMPLES}*2))
 
 cd ../../results
 if [ $NUM_PROC -eq $TOTAL_PROC ]
 then
 	j=1
-	while[ $j -le $NUM_SAMPLES ]
+	while [ $j -le $NUM_SAMPLES ]
 	do
 		echo ""
 		echo "   Continuing with peak determination of sample $j, it is almost done!"
