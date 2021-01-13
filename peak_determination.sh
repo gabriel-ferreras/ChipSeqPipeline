@@ -16,6 +16,9 @@ MOTIFSIZE=$9
 ## Accessing results folder
 cd $RES_DIR
 
+## Creating sample folder
+mkdir sample_$i
+
 ## Peak determination
 echo ""
 echo "=========================="
