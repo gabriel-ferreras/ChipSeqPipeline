@@ -30,8 +30,8 @@ then
 	fastqc control_$i.fastq.gz
 	bowtie2 -x ../../genome/index -U control_$i.fastq.gz -S control_$i.sam
 else
-	fastqc control_${1}_1.fastq.gz
-	fastqc control_${1}_2.fastq.gz
+	fastqc control_${i}_1.fastq.gz
+	fastqc control_${i}_2.fastq.gz
 	bowtie2 -x ../../genome/index -1 control_${i}_1.fastq.gz -2 control_${i}_2.fastq.gz -S control_$i.sam
 fi
 
