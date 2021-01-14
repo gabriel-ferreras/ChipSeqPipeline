@@ -92,9 +92,16 @@ NUM_PROC=$(wc -l ../../results/blackboard_2.txt | awk '{ print $1 }')
 
 if [ NUM_PROC -eq NUM_SAMPLES ]
 then
-	
+	k=1
+	while [ $k -le $NUM_EXP ]
+	do
+		mkdir exp_${k}_result
+		Rscript ${INS_DIR}/ChipSeqPipeline/exp_${k}_analysis.R $k $EXP_DESIGN
+		cd ..
+		((k++))
+	done
 fi
 
 echo ""
-echo "Analysis complete!!"
+echo "Analysis completed!!"
 echo ""
