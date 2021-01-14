@@ -96,7 +96,7 @@ then
 	while [ $k -le $NUM_EXP ]
 	do
 		mkdir exp_${k}_result
-		Rscript ${INS_DIR}/ChipSeqPipeline/exp_${k}_analysis.R $k $EXP_DESIGN
+		Rscript ${INS_DIR}/ChipSeqPipeline/exp_analysis.R $k $EXP_DESIGN $j $EXP
 		cd ..
 		((k++))
 	done
