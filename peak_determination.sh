@@ -53,16 +53,16 @@ echo ""
 
 if [ $BROAD -eq 0 ]
 then
-        echo ""
+	echo ""
 	echo " Annotating NARROW peaks for sample $j"
-        echo ""
-        Rscript ${INS_DIR}/ChipSeqPipeline/target_genes.R ${EXP}_sample_${j}_peaks.narrowPeak ${EXP}_sample_${j}_summits.bed $UPSTREAM $DOWNSTREAM ${EXP}_sample_${j}_peaks_targetgenes.txt ${EXP}_sample_${j}_summits_targetgenes.txt
+	echo ""
+	Rscript ${INS_DIR}/ChipSeqPipeline/target_genes.R ${EXP}_sample_${j}_peaks.narrowPeak ${EXP}_sample_${j}_summits.bed $UPSTREAM $DOWNSTREAM ${EXP}_sample_${j}_peaks_targetgenes.txt ${EXP}_sample_${j}_summits_targetgenes.txt
 
 else
 	echo ""
-        echo " Annotating BROAD peaks for sample $j"
+	echo " Annotating BROAD peaks for sample $j"
 	echo ""
-        Rscript ${INS_DIR}/ChipSeqPipeline/target_genes.R ${EXP}_sample_${j}_peaks.broadPeak ${EXP}_sample_${j}_summits.bed $UPSTREAM $DOWNSTREAM ${EXP}_sample_${j}_peaks_targetgenes.txt ${EXP}_sample_${j}_summits_targetgenes.txt
+	Rscript ${INS_DIR}/ChipSeqPipeline/target_genes.R ${EXP}_sample_${j}_peaks.broadPeak ${EXP}_sample_${j}_summits.bed $UPSTREAM $DOWNSTREAM ${EXP}_sample_${j}_peaks_targetgenes.txt ${EXP}_sample_${j}_summits_targetgenes.txt
 fi
 
 echo ""
