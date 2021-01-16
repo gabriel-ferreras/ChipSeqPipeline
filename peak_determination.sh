@@ -5,7 +5,7 @@
 
 RES_DIR=$1
 NUM_SAMPLES=$2
-EXP=$3
+ANALYSIS=$3
 BROAD=$4
 INS_DIR=$5
 UPSTREAM=$6
@@ -35,13 +35,13 @@ then
 	echo ""
 	echo " Determining NARROW peaks for sample $j"
 	echo ""
-        macs2 callpeak -t ../samples/chip_$j/chip_$j.bam -c ../samples/control_$j/control_$j.bam -f BAM --outdir . -n ${EXP}_sample_$j
+        macs2 callpeak -t ../samples/chip_$j/chip_$j.bam -c ../samples/control_$j/control_$j.bam -f BAM --outdir . -n ${ANALYSIS}_sample_$j
 
 else
 	echo ""
 	echo " Determining BROAD peaks for sample $j"
 	echo ""
-        macs2 callpeak -t ../samples/chip_$j/chip_$j.bam -c ../samples/control_$j/control_$j.bam -f BAM --outdir . -n ${EXP}_sample_$j --broad
+        macs2 callpeak -t ../samples/chip_$j/chip_$j.bam -c ../samples/control_$j/control_$j.bam -f BAM --outdir . -n ${ANALYSIS}_sample_$j --broad
 
 fi
 
@@ -56,13 +56,13 @@ then
 	echo ""
 	echo " Annotating NARROW peaks for sample $j"
 	echo ""
-	Rscript ${INS_DIR}/ChipSeqPipeline/target_genes.R ${EXP}_sample_${j}_peaks.narrowPeak ${EXP}_sample_${j}_summits.bed $UPSTREAM $DOWNSTREAM ${EXP}_sample_${j}_peaks_targetgenes.txt ${EXP}_sample_${j}_summits_targetgenes.txt
+	Rscript ${INS_DIR}/ChipSeqPipeline/target_genes.R ${ANALYSIS}_sample_${j}_peaks.narrowPeak ${ANALYSIS}_sample_${j}_summits.bed $UPSTREAM $DOWNSTREAM ${ANALYSIS}_sample_${j}_peaks_targetgenes.txt ${ANALYSIS}_sample_${j}_summits_targetgenes.txt
 
 else
 	echo ""
 	echo " Annotating BROAD peaks for sample $j"
 	echo ""
-	Rscript ${INS_DIR}/ChipSeqPipeline/target_genes.R ${EXP}_sample_${j}_peaks.broadPeak ${EXP}_sample_${j}_summits.bed $UPSTREAM $DOWNSTREAM ${EXP}_sample_${j}_peaks_targetgenes.txt ${EXP}_sample_${j}_summits_targetgenes.txt
+	Rscript ${INS_DIR}/ChipSeqPipeline/target_genes.R ${ANALYSIS}_sample_${j}_peaks.broadPeak ${ANALYSIS}_sample_${j}_summits.bed $UPSTREAM $DOWNSTREAM ${ANALYSIS}_sample_${j}_peaks_targetgenes.txt ${ANALYSIS}_sample_${j}_summits_targetgenes.txt
 fi
 
 echo ""
@@ -76,7 +76,7 @@ echo " Finding motives for sample $j"
 echo ""
 mkdir motifs_sample_${j}
 cd motifs_sample_${j}
-findMotifsGenome.pl ../${EXP}_sample_${j}_summits.bed tair10 . -len $MOTIFLENGTH -size $MOTIFSIZE
+findMotifsGenome.pl ../${ANALYSIS}_sample_${j}_summits.bed tair10 . -len $MOTIFLENGTH -size $MOTIFSIZE
 cd ..
 cd ..
 
@@ -96,7 +96,7 @@ then
 	while [ $k -le $NUM_EXP ]
 	do
 		mkdir exp_${k}_result
-		Rscript ${INS_DIR}/ChipSeqPipeline/exp_analysis.R $k $EXP_DESIGN $j $EXP
+		Rscript ${INS_DIR}/ChipSeqPipeline/exp_analysis.R $k $EXP_DESIGN $NUM_SAMPLES $ANALYSIS
 		cd ..
 		((k++))
 	done

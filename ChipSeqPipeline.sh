@@ -24,8 +24,8 @@ echo "      Installation directory is "$INS_DIR
 WORK_DIR=$(grep working_directory: $PARAMS | awk '{ print $2 }')
 echo "      Working directory is "$WORK_DIR
 
-EXP=$(grep experiment_name: $PARAMS | awk '{ print $2 }')
-echo "      Experiment name = "$EXP
+ANALYSIS=$(grep analysis_name: $PARAMS | awk '{ print $2 }')
+echo "      Analysis name = "$EXP
 
 NUM_SAMPLES=$(grep number_samples: $PARAMS | awk '{ print $2 }')
 echo "      Number samples = "$NUM_SAMPLES
@@ -115,8 +115,8 @@ echo "| CREATING WORKSPACE |"
 echo "======================"
 echo ""
 cd $WORK_DIR
-mkdir $EXP
-cd $EXP
+mkdir $ANALYSIS
+cd $ANALYSIS
 mkdir results genome annotation samples
 cd samples
 i=1
@@ -129,16 +129,16 @@ done
 cd ..
 
 #Copying the data.
-cp $ANNOTATION $WORK_DIR/$EXP/annotation/annotation.gtf
-cp $GENOME $WORK_DIR/$EXP/genome/genome.fa
+cp $ANNOTATION $WORK_DIR/$ANALYSIS/annotation/annotation.gtf
+cp $GENOME $WORK_DIR/$ANALYSIS/genome/genome.fa
 if [ $PAIRED -eq 0 ]
 then
 	i=1
 	while [ $i -le $NUM_SAMPLES ]
 	do
         	j=$((i - 1))
-        	cp ${CHIPS[j]} $WORK_DIR/$EXP/samples/chip_$i/chip_$i.fastq.gz
-		cp ${CONTROLS[j]} $WORK_DIR/$EXP/samples/control_$i/control_$i.fastq.gz
+        	cp ${CHIPS[j]} $WORK_DIR/$ANALYSIS/samples/chip_$i/chip_$i.fastq.gz
+		cp ${CONTROLS[j]} $WORK_DIR/$ANALYSIS/samples/control_$i/control_$i.fastq.gz
         	((i++))
 	done
 else
@@ -147,10 +147,10 @@ else
         while [ $i -le $NUM_SAMPLES ]
         do
                 j=$((i - 1))
-                cp ${CHIPS[j]} $WORK_DIR/$EXP/samples/chip_$i/chip_${i}_1.fastq.gz
-                cp ${CONTROLS[j]} $WORK_DIR/$EXP/samples/control_$i/control_${i}_1.fastq.gz
-                cp ${CHIPS[i]} $WORK_DIR/$EXP/samples/chip_$i/chip_${i}_2.fastq.gz
-                cp ${CONTROLS[i]} $WORK_DIR/$EXP/samples/control_$i/control_${i}_2.fastq.gz
+                cp ${CHIPS[j]} $WORK_DIR/$ANALYSIS/samples/chip_$i/chip_${i}_1.fastq.gz
+                cp ${CONTROLS[j]} $WORK_DIR/$ANALYSIS/samples/control_$i/control_${i}_1.fastq.gz
+                cp ${CHIPS[i]} $WORK_DIR/$ANALYSIS/samples/chip_$i/chip_${i}_2.fastq.gz
+                cp ${CONTROLS[i]} $WORK_DIR/$ANALYSIS/samples/control_$i/control_${i}_2.fastq.gz
 		i=$(( $i + 2 ))
         done
 
@@ -162,7 +162,7 @@ echo "========================="
 echo "| CREATING GENOME INDEX |"
 echo "========================="
 echo ""
-cd $WORK_DIR/$EXP/genome
+cd $WORK_DIR/$ANALYSIS/genome
 bowtie2-build genome.fa index
 
 
@@ -179,8 +179,8 @@ i=1
 while [ $i -le $NUM_SAMPLES ]
 do
         echo "Sent to processing chip $i"
-	qsub -o chip_$i -N chip_$i $INS_DIR/ChipSeqPipeline/chip_sample_processing.sh $WORK_DIR/$EXP/samples/chip_$i $i $NUM_SAMPLES $INS_DIR $EXP $BROAD $PAIRED $UPSTREAM $DOWNSTREAM $MOTIFLENGTH $MOTIFSIZE $NUM_EXP $EXP_DESIGN
+	qsub -o chip_$i -N chip_$i $INS_DIR/ChipSeqPipeline/chip_sample_processing.sh $WORK_DIR/$ANALYSIS/samples/chip_$i $i $NUM_SAMPLES $INS_DIR $ANALYSIS $BROAD $PAIRED $UPSTREAM $DOWNSTREAM $MOTIFLENGTH $MOTIFSIZE $NUM_EXP $EXP_DESIGN
         echo "Sent to processing control $i"
-	qsub -o control_$i -N control_$i $INS_DIR/ChipSeqPipeline/control_sample_processing.sh $WORK_DIR/$EXP/samples/control_$i $i $NUM_SAMPLES $INS_DIR $EXP $BROAD $PAIRED $UPSTREAM $DOWNSTREAM $MOTIFLENGTH $MOTIFSIZE $NUM_EXP $EXP_DESIGN
+	qsub -o control_$i -N control_$i $INS_DIR/ChipSeqPipeline/control_sample_processing.sh $WORK_DIR/$ANALYSIS/samples/control_$i $i $NUM_SAMPLES $INS_DIR $ANALYSIS $BROAD $PAIRED $UPSTREAM $DOWNSTREAM $MOTIFLENGTH $MOTIFSIZE $NUM_EXP $EXP_DESIGN
 	((i++))
 done

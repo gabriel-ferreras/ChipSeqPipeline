@@ -1,4 +1,4 @@
-experiment_name: prr5
+analysis_name: prr5
 number_samples: 1
 number_experiments: 1
 experimental_design: "( 1 )"

@@ -3,9 +3,9 @@
 #                          CHIP-SEQ ANALYSIS                               #
 ############################################################################
 ## Authors:
-    # Antonio Álvarez Gómez
+    # Antonio Álvarez Gómez (alvarezgomezantonio@gmail.com)
     # Gabriel Ferreras Garrucho (gabrifg10@gmail.com)
-    # Helena Victoria Cotán
+    # Helena Victoria Cotán (hevico99@gmail.com)
 
 ## Install the following packages if not already installed:
 
@@ -23,7 +23,7 @@
   txdb <- TxDb.Athaliana.BioMart.plantsmart28
   library(org.At.tair.db)
   
-## Reading arguments.
+## Reading arguments:
   args = commandArgs(trailingOnly=TRUE)
   
   peak_file <- args[1]
@@ -33,30 +33,30 @@
   peak_output <- args[5]
   summit_output <- args[6]
 
-## Reading peak file.
+## Reading peak file:
   
   peaks <- readPeakFile(peakfile = peak_file,header=FALSE)
   summits <- readPeakFile(peakfile = summit_file,header=FALSE)
   
-## Definition of promoter region.
+## Definition of promoter region:
   
   promoter <- getPromoters(TxDb=txdb, upstream=up_limit, downstream=down_limit)
   tagMatrix <- getTagMatrix(peaks, windows=promoter)
 
-## Peak annotation.
+## Peak annotation:
 
-  peakAnno <- annotatePeak(peak = peaks, tssRegion=c(-down_limit, up_limit), 
+  peakAnno <- annotatePeak(peak = peaks, tssRegion=c(-up_limit, down_limit), 
                          TxDb=txdb, annoDb = "org.At.tair.db")
-  summitAnno <- annotatePeak(peak = summits, tssRegion=c(-down_limit, up_limit), 
+  summitAnno <- annotatePeak(peak = summits, tssRegion=c(-up_limit, down_limit), 
                            TxDb=txdb, annoDb = "org.At.tair.db")
   
-## Converting annotation to data frame and exporting
+## Converting annotation to data frame and exporting:
   peakannotation <- as.data.frame(peakAnno)
-  peak.target.genes <- peakannotation$geneId[peakannotation$annotation == "Promoter"]
+  peak.target.genes <- peakannotation$geneId[grepl("Promoter", peakannotation$annotation)]
   write(x = peak.target.genes, file = peak_output)
 
   summitannotation <- as.data.frame(summitAnno)
-  summit.target.genes <- summitannotation$geneId[summitannotation$annotation == "Promoter"]
+  summit.target.genes <- summitannotation$geneId[grepl("Promoter", summitannotation$annotation)]
   write(x = summit.target.genes, file = summit_output)
 
 

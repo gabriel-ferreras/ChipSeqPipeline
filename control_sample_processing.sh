@@ -7,7 +7,7 @@ SAMPLE_DIR=$1
 i=$2
 NUM_SAMPLES=$3
 INS_DIR=$4
-EXP=$5
+ANALYSIS=$5
 BROAD=$6
 PAIRED=$7
 UPSTREAM=$8
@@ -62,6 +62,6 @@ then
 		echo ""
 		echo "   Continuing with peak determination of sample $j, it is almost done!"
 		echo ""
-		qsub -o peaks_${j} -N peaks_${j} $INS_DIR/ChipSeqPipeline/peak_determination.sh $SAMPLE_DIR/../../results $NUM_SAMPLES $EXP $BROAD $INS_DIR $UPSTREAM $DOWNSTREAM $MOTIFLENGTH $MOTIFSIZE $NUM_EXP $EXP_DESIGN $j
+		qsub -o peaks_${j} -N peaks_${j} $INS_DIR/ChipSeqPipeline/peak_determination.sh $SAMPLE_DIR/../../results $NUM_SAMPLES $ANALYSIS $BROAD $INS_DIR $UPSTREAM $DOWNSTREAM $MOTIFLENGTH $MOTIFSIZE $NUM_EXP $EXP_DESIGN $j
 		((j++))
 fi
