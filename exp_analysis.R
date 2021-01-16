@@ -39,6 +39,21 @@ for (i in samples_in_exp)
 
 experiment_overlap <- calculate.overlap(exp_all_peaks)
 
-## Al parecer no podemos extraerlo así:
-enriched_target_genes <- experiment_overlap[[1]]
+
+if (length(samples_in_exp) == 1) 
+{
+  enriched_target_genes <- experiment_overlap[[1]]
+} else if (length(samples_in_exp) == 2) 
+{
+  enriched_target_genes <- experiment_overlap$a3
+} else if (length(samples_in_exp) == 3)
+{
+  enriched_target_genes <- experiment_overlap$a5
+} else if (length(samples_in_exp) == 3)
+{
+  enriched_target_genes <- experiment_overlap$a6
+} else if (length(samples_in_exp) == 5)
+{
+  enriched_target_genes <- experiment_overlap$a31
+}
 
