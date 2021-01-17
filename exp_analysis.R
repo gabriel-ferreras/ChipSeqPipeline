@@ -90,7 +90,10 @@
                keyType = "TAIR", 
                ont = "BP", 
                universe = my_universe)
-
+ 
+ BP_name<-paste(analysis_name, "experiment", experiment, "BP_GOs.txt", sep = "_")
+ write.table(BP, file = BP_name, sep = ",")
+ 
  if (nrow(as.data.frame(BP)) > 0)
  {
     print("")
@@ -127,6 +130,9 @@
                 ont = "MF", 
                 universe = my_universe)
  
+ MF_name<-paste(analysis_name, "experiment", experiment, "MF_GOs.txt", sep = "_")
+ write.table(MF, file = MF_name, sep = ",")
+ 
  if (nrow(as.data.frame(MF)) > 0)
  {
     print("")
@@ -162,7 +168,10 @@
                 keyType = "TAIR", 
                 ont = "CC", 
                 universe = my_universe)
-
+ 
+ CC_name<-paste(analysis_name, "experiment", experiment, "CC_GOs.txt", sep = "_")
+ write.table(CC, file = CC_name, sep = ",")
+ 
  if (nrow(as.data.frame(CC)) > 0)
  {
     print("")
@@ -201,6 +210,9 @@
                   pAdjustMethod = "BH",
                   pvalueCutoff = 0.05)
 
+ kk_name<-paste(analysis_name, "experiment", experiment, "KEGGs.txt", sep = "_")
+ write.table(kk, file = kk_name, sep = ",")
+ 
  if (nrow(as.data.frame(kk)) > 0)
  {
     print("")

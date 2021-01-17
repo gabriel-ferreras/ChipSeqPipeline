@@ -69,5 +69,3 @@
   summit.target.genes <- summitannotation$geneId[grepl("Promoter", summitannotation$annotation)]
   write(x = summit.target.genes, file = summit_output)
 
-
-
