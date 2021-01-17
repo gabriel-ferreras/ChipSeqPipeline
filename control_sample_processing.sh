@@ -60,7 +60,7 @@ then
 	while [ $j -le $NUM_SAMPLES ]
 	do
 		echo ""
-		echo "   Continuing with peak determination of sample $j, it is almost done!"
+		echo "   Continuing with peak determination of sample $j, you are halfway there!"
 		echo ""
 		qsub -o peaks_${j} -N peaks_${j} $INS_DIR/ChipSeqPipeline/peak_determination.sh $SAMPLE_DIR/../../results $NUM_SAMPLES $ANALYSIS $BROAD $INS_DIR $UPSTREAM $DOWNSTREAM $MOTIFLENGTH $MOTIFSIZE $NUM_EXP $EXP_DESIGN $j
 		((j++))

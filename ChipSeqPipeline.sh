@@ -6,7 +6,7 @@ then
     echo ""
     echo "    Usage: bash ChipSeqPipeline.sh <params_file>"
     echo ""
-    echo "    params_file: imput file with the parameters."
+    echo "    params_file: input file with the parameters."
     echo "    Example of params_file in test_params."
     exit
 fi

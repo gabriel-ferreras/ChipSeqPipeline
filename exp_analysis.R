@@ -20,18 +20,20 @@
  library(VennDiagram)
  library(TxDb.Athaliana.BioMart.plantsmart28)
  txdb <- TxDb.Athaliana.BioMart.plantsmart28
-
-
+ library(clusterProfiler)
+ library(org.At.tair.db)
+ library(pathview)
+ 
 ## Reading arguments:
 
  args <- commandArgs(trailingOnly = TRUE)
 
- experiment <- args[1]
+ experiment <- as.numeric(args[1])
  exp_design <- args[2]
- num_samples <- args[3]
+ num_samples <- as.numeric(args[3])
  analysis_name <- args[4]
  
- exp_design_vector <- as.numeric(unlist(strsplit(substr(exp_design, num_samples, nchar(hola)-1), ",")))
+ exp_design_vector <- as.numeric(unlist(strsplit(substr(exp_design, 2, nchar(exp_design)-1), ",")))
 
  
 ## Grouping the replicates of the experiment:
@@ -44,7 +46,7 @@
  }
 
  
-## Extracting the overlapping peaks, that is, the regulome of the transcription factor:
+## Extracting the overlapping peaks, that is, the potential regulome of the transcription factor:
  
  experiment_overlap <- calculate.overlap(exp_all_peaks)
  if (length(samples_in_exp) == 1) 
@@ -56,19 +58,19 @@
  } else if (length(samples_in_exp) == 3)
  {
    regulome <- experiment_overlap$a5
- } else if (length(samples_in_exp) == 3)
+ } else if (length(samples_in_exp) == 4)
  {
    regulome <- experiment_overlap$a6
  } else if (length(samples_in_exp) == 5)
  {
    regulome <- experiment_overlap$a31
  }
-
+ name<-paste(analysis_name, "experiment", experiment, "overlappinggenes.txt", sep = "_")
+ write(x = regulome, file = name)
  
 ## Gene ontology enrichment:
  
  genes_atha <- as.data.frame(genes(txdb))
-
  my_universe <- genes_atha$gene_id
 
  BP <- enrichGO(gene = regulome,
@@ -77,42 +79,133 @@
                ont = "BP", 
                universe = my_universe)
 
- barplot(BP, showCategory = 20)
- dotplot(BP, showCategory = 20)
- cnetplot(BP)
- emapplot(BP)
-
+ if (nrow(as.data.frame(BP)) > 0)
+ {
+    print("")
+    print("BIOLOGICAL PROCESS ENRICHMENT FOUND")
+    print("")
+    barplot(BP, showCategory = 20)
+ }
+ if (nrow(as.data.frame(BP)) > 0)
+ {
+    dotplot(BP, showCategory = 20)
+ }
+ if (nrow(as.data.frame(BP)) > 0)
+ {
+    cnetplot(BP)
+ }
+ if (nrow(as.data.frame(BP)) > 1)
+ {
+    emapplot(BP)
+ }
+ if (nrow(as.data.frame(BP)) > 1)
+ {
+    goplot(BP)
+ }
+ if (nrow(as.data.frame(BP)) == 0)
+ {
+    print("")
+    print("NO BIOLOGICAL PROCESS ENRICHMENT FOUND")
+    print("")
+ }
+ 
  MF <- enrichGO(gene = regulome,
                 OrgDb = "org.At.tair.db",
                 keyType = "TAIR", 
                 ont = "MF", 
                 universe = my_universe)
-
- barplot(MF, showCategory = 20)
- dotplot(MF, showCategory = 20)
- cnetplot(MF)
- emapplot(MF)
-
+ 
+ if (nrow(as.data.frame(MF)) > 0)
+ {
+    print("")
+    print("MOLECULAR FUNCTION ENRICHMENT FOUND")
+    print("")
+    barplot(MF, showCategory = 20)
+ }
+ if (nrow(as.data.frame(MF)) > 0)
+ {
+    dotplot(MF, showCategory = 20)
+ }
+ if (nrow(as.data.frame(MF)) > 0)
+ {
+    cnetplot(MF)
+ }
+ if (nrow(as.data.frame(MF)) > 1)
+ {
+    emapplot(MF)
+ }
+ if (nrow(as.data.frame(MF)) > 1)
+ {
+    goplot(MF)
+ }
+ if (nrow(as.data.frame(MF)) == 0)
+ {
+    print("")
+    print("NO MOLECULAR FUNCTION ENRICHMENT FOUND")
+    print("")
+ }
+ 
  CC <- enrichGO(gene = regulome,
                 OrgDb = "org.At.tair.db",
                 keyType = "TAIR", 
                 ont = "CC", 
                 universe = my_universe)
 
- barplot(CC, showCategory = 20)
- dotplot(CC, showCategory = 20)
- cnetplot(CC)
- emapplot(CC)
-
+ if (nrow(as.data.frame(CC)) > 0)
+ {
+    print("")
+    print("CELLULAR COMPONENT ENRICHMENT FOUND")
+    print("")
+    barplot(CC, showCategory = 20)
+ }
+ if (nrow(as.data.frame(CC)) > 0)
+ {
+    dotplot(CC, showCategory = 20)
+ }
+ if (nrow(as.data.frame(CC)) > 0)
+ {
+    cnetplot(CC)
+ }
+ if (nrow(as.data.frame(CC)) > 1)
+ {
+    emapplot(CC)
+ }
+ if (nrow(as.data.frame(CC)) > 1)
+ {
+    goplot(CC)
+ }
+ if (nrow(as.data.frame(CC)) == 0)
+ {
+    print("")
+    print("NO CELLULAR COMPONENT ENRICHMENT FOUND")
+    print("")
+ }
 
 ## KEGG pathway enrichment:
  
- KEGG <- enrichKEGG(gene = regulome,
-                    organism = "ath",
-                    pvalueCutoff = 0.05)
+ kk <- enrichKEGG(gene = regulome,
+                  universe = my_universe, 
+                  organism = "ath",
+                  pAdjustMethod = "BH",
+                  pvalueCutoff = 0.05)
 
- browseKEGG(KEGG, "ath00010")
-
- pathview(gene.data  = regulome,
-          pathway.id = "ath00010",
-          species    = "ath")
+ if (nrow(as.data.frame(kk)) > 0)
+ {
+    print("")
+    print("KEGG ENRICHMENT FOUND")
+    print("")
+    for (i in 1:nrow(as.data.frame(kk)))
+    {
+       pathview(gene.data  = regulome, 
+                gene.idtype = "KEGG", 
+                pathway.id = kk[i]$ID,
+                species    = "ath")
+    }
+ }
+ if (nrow(as.data.frame(kk)) == 0)
+ {
+    print("")
+    print("NO KEGG ENRICHMENT FOUND")
+    print("")
+ }
+ 

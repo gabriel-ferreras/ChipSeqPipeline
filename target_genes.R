@@ -49,7 +49,17 @@
                          TxDb=txdb, annoDb = "org.At.tair.db")
   summitAnno <- annotatePeak(peak = summits, tssRegion=c(-up_limit, down_limit), 
                            TxDb=txdb, annoDb = "org.At.tair.db")
-  
+  plotAnnoPie(peakAnno)
+  plotAnnoBar(peakAnno)
+  plotDistToTSS(peakAnno,
+                title="Distribution of genomic loci relative to TSS",
+                ylab = "Genomic Loci (%) (5' -> 3')")
+  plotAnnoPie(summitAnno)
+  plotAnnoBar(summitAnno)
+  plotDistToTSS(summitAnno,
+                title="Distribution of genomic loci relative to TSS",
+                ylab = "Genomic Loci (%) (5' -> 3')")
+
 ## Converting annotation to data frame and exporting:
   peakannotation <- as.data.frame(peakAnno)
   peak.target.genes <- peakannotation$geneId[grepl("Promoter", peakannotation$annotation)]
