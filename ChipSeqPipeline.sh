@@ -69,20 +69,20 @@ then
 	i=0
 	while [ $i -lt $NUM_SAMPLES ]
 	do
-        	j=$(( $i + 1 ))
-        	CHIPS[$i]=$(grep path_chip_$j: $PARAMS | awk '{ print $2 }')
-        	echo "      Chip $j in ${CHIPS[$i]}"
-        	((i++))
+        		j=$(( $i + 1 ))
+        		CHIPS[$i]=$(grep path_chip_$j: $PARAMS | awk '{ print $2 }')
+        		echo "      Chip $j in ${CHIPS[$i]}"
+        		((i++))
 	done
 
 	CONTROLS=()
 	i=0
 	while [ $i -lt $NUM_SAMPLES ]
-	do
-        	j=$(( $i + 1 ))
-        	CONTROLS[$i]=$(grep path_control_$j: $PARAMS | awk '{ print $2 }')
-        	echo "      Control $j in ${CONTROLS[$i]}"
-        	((i++))
+		do
+        		j=$(( $i + 1 ))
+        		CONTROLS[$i]=$(grep path_control_$j: $PARAMS | awk '{ print $2 }')
+        		echo "      Control $j in ${CONTROLS[$i]}"
+        		((i++))
 	done
 
 else
