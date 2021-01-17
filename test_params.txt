@@ -14,3 +14,4 @@ upstream_limit: 1000
 downstream_limit: 1000
 motif_length: 8
 motif_size: 100
+chromosome: 1

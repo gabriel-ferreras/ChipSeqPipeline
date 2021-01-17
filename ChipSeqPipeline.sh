@@ -60,6 +60,9 @@ echo "      Number of experiments = "$NUM_EXP
 EXP_DESIGN=$(grep experimental_design: $PARAMS | awk '{ print $2 }')
 echo "      Experimental design =" $EXP_DESIGN
 
+CHR=$(grep chromosome: $PARAMS | awk '{ print $2 }')
+echo "      Chromosome selected for analysis is" $CHR
+
 if [ $PAIRED -eq 0 ]
 then
 	CHIPS=()
@@ -179,8 +182,8 @@ i=1
 while [ $i -le $NUM_SAMPLES ]
 do
         echo "Sent to processing chip $i"
-	qsub -o chip_$i -N chip_$i $INS_DIR/ChipSeqPipeline/chip_sample_processing.sh $WORK_DIR/$ANALYSIS/samples/chip_$i $i $NUM_SAMPLES $INS_DIR $ANALYSIS $BROAD $PAIRED $UPSTREAM $DOWNSTREAM $MOTIFLENGTH $MOTIFSIZE $NUM_EXP $EXP_DESIGN
+	qsub -o chip_$i -N chip_$i $INS_DIR/ChipSeqPipeline/chip_sample_processing.sh $WORK_DIR/$ANALYSIS/samples/chip_$i $i $NUM_SAMPLES $INS_DIR $ANALYSIS $BROAD $PAIRED $UPSTREAM $DOWNSTREAM $MOTIFLENGTH $MOTIFSIZE $NUM_EXP $EXP_DESIGN $CHR
         echo "Sent to processing control $i"
-	qsub -o control_$i -N control_$i $INS_DIR/ChipSeqPipeline/control_sample_processing.sh $WORK_DIR/$ANALYSIS/samples/control_$i $i $NUM_SAMPLES $INS_DIR $ANALYSIS $BROAD $PAIRED $UPSTREAM $DOWNSTREAM $MOTIFLENGTH $MOTIFSIZE $NUM_EXP $EXP_DESIGN
+	qsub -o control_$i -N control_$i $INS_DIR/ChipSeqPipeline/control_sample_processing.sh $WORK_DIR/$ANALYSIS/samples/control_$i $i $NUM_SAMPLES $INS_DIR $ANALYSIS $BROAD $PAIRED $UPSTREAM $DOWNSTREAM $MOTIFLENGTH $MOTIFSIZE $NUM_EXP $EXP_DESIGN $CHR
 	((i++))
 done

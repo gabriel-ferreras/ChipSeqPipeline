@@ -32,6 +32,7 @@
  exp_design <- args[2]
  num_samples <- as.numeric(args[3])
  analysis_name <- args[4]
+ chromosome <- args[5]
  
  exp_design_vector <- as.numeric(unlist(strsplit(substr(exp_design, 2, nchar(exp_design)-1), ",")))
 
@@ -71,8 +72,19 @@
 ## Gene ontology enrichment:
  
  genes_atha <- as.data.frame(genes(txdb))
- my_universe <- genes_atha$gene_id
-
+ if(chromosome == "ALL")
+ {
+   genes_selection<-genes_atha
+ }
+ 
+ if(chromosome != "ALL")
+ {
+   chromosome<-as.numeric(chromosome)
+   genes_selection<-subset(genes_atha, seqnames == chromosome)
+ }
+ 
+ my_universe <- genes_selection$gene_id
+ 
  BP <- enrichGO(gene = regulome,
                OrgDb = "org.At.tair.db",
                keyType = "TAIR", 

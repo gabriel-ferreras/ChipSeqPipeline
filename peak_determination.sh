@@ -15,6 +15,7 @@ MOTIFSIZE=$9
 NUM_EXP=${10}
 EXP_DESIGN=${11}
 j=${12}
+CHR=${13}
 
 ## Accessing results folder
 cd $RES_DIR
@@ -96,7 +97,7 @@ then
 	while [ $k -le $NUM_EXP ]
 	do
 		mkdir exp_${k}_result
-		Rscript ${INS_DIR}/ChipSeqPipeline/exp_analysis.R $k $EXP_DESIGN $NUM_SAMPLES $ANALYSIS
+		Rscript ${INS_DIR}/ChipSeqPipeline/exp_analysis.R $k $EXP_DESIGN $NUM_SAMPLES $ANALYSIS $CHR
 		cd ..
 		((k++))
 	done

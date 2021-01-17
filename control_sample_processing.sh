@@ -16,6 +16,7 @@ MOTIFLENGTH=${10}
 MOTIFSIZE=${11}
 NUM_EXP=${12}
 EXP_DESIGN=${13}
+CHR=${14}
 
 echo ""
 echo "============================="
@@ -62,6 +63,6 @@ then
 		echo ""
 		echo "   Continuing with peak determination of sample $j, you are halfway there!"
 		echo ""
-		qsub -o peaks_${j} -N peaks_${j} $INS_DIR/ChipSeqPipeline/peak_determination.sh $SAMPLE_DIR/../../results $NUM_SAMPLES $ANALYSIS $BROAD $INS_DIR $UPSTREAM $DOWNSTREAM $MOTIFLENGTH $MOTIFSIZE $NUM_EXP $EXP_DESIGN $j
+		qsub -o peaks_${j} -N peaks_${j} $INS_DIR/ChipSeqPipeline/peak_determination.sh $SAMPLE_DIR/../../results $NUM_SAMPLES $ANALYSIS $BROAD $INS_DIR $UPSTREAM $DOWNSTREAM $MOTIFLENGTH $MOTIFSIZE $NUM_EXP $EXP_DESIGN $j $CHR
 		((j++))
 fi
