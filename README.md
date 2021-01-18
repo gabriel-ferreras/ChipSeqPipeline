@@ -96,31 +96,41 @@ The steps you need to follow are these described:
   
 To run the pipeline on your experimental data, first enter the necessary parameters in the spreadsheet file (see following section), and then from the terminal type:
 
-    ```bash
-    bash ChipSeqPipeline test_params.txt
-    ```
+```sh
+bash ChipSeqPipeline test_params.txt
+```
 
 ### Input parameters
 
 The pipeline requires a file as input to specify the samples and the design of the analysis. Within the repository you can find an example of parameters file (test_params.txt). The parameters you need to include are:
 
-  * **analysis_name**: is the name you want to give to the analysis
-  * **number_samples**: the number of samples that are going to be processed
-  * **number_experiments**: the number of experiments that are going to be processed
-  * **experimental_design**: specify the samples that correspond to each experiment
-  * **installation_directory**: the directory where the repository is placed
-  * **working_directory**: the directory where all the data is going to be placed during the analysis
-  * **path_annotation**: the directory where the annotation is placed
-  * **path_genome**: the directory where the genome is placed
-  * **paired**: indicate wheter the samples are paired (True/1) or not (False/0)
-  * **path_chip_1**: the directory where the chip samples are placed
-  * **path_control_1**: the directory where the control samples are placed
-  * **broad**: indicate wheter, in the peak analysis, you prefer to indentify narrow peaks (False/0) or broad peaks (True/1). For more information, visit https://hbctraining.github.io/Intro-to-ChIPseq/lessons/05_peak_calling_macs.html 
-  * **upstream_limit**: indicate the window length you desire to define as a promoter region upstream the peak identified, in the analysis of the possible target genes
-  * **downstream_limit**: indicate the window length you desire to define as a promoter region downstream the peak identified, in the analysis of the possible target genes
-  * **motif_length**: specifie the length of motifs to be found. For more information, visit http://homer.ucsd.edu/homer/ngs/peakMotifs.html
-  * **motif_size**: indicate the size of the region analyze when searching for motifs. For more information, visit http://homer.ucsd.edu/homer/ngs/peakMotifs.html
-  * **chromosome**: specifie the chromosome you are referring to
+ * **General parameters**:
+    - **analysis_name**: is the name you desire to give to the analysis. The folder created during the process will carry this name.
+    - **number_samples**: the number of samples that are going to be processed. Count the pair Chip/Control just as one sample. Does not matter wether if the samples are paired or not.
+    - **number_experiments**: the number of experiments that are going to be processed
+    - **experimental_design**: specify the samples that correspond to each experiment. For example, if there are two experiments and each experiment has two samples, indicate it as "(1, 1, 2, 2 )"
+ 
+ * **Directories**:
+    - **working_directory**: the directory where all the data is going to be placed during the analysis
+    - **installation_directory**: the directory where the repository is placed
+    - **path_annotation**: the directory where the annotation is placed
+    - **path_genome**: the directory where the genome is placed
+    - **path_chip_1**: the directory where the chip samples are placed
+    - **path_control_1**: the directory where the control samples are placed  
+    
+ * **Eligible parameters**:
+    - **paired**: indicate whether the samples are from a paired-end sequencing (True/1) or a single-end sequencing (False/0).
+       > [`Paired-end sequencing`](https://www.illumina.com/science/technology/next-generation-sequencing/plan-experiments/paired-end-vs-single-read.html) allows users to sequence both ends of a fragment and generate high-quality, alignable sequence data. It produces twice the bumber of reads in teh same time and detect insertion-deletion (indel) variants, which is not possible with single-read data.
+       > [`Single-end sequencing`](https://www.illumina.com/science/technology/next-generation-sequencing/plan-experiments/paired-end-vs-single-read.html) involves sequencing DNA from only one end, delivering large volumes of high-quality data, rapidly and economically.
+    - **broad**: indicate whether, in the peak analysis, you prefer to indentify broad peaks (True/1) or narrow peaks (False/0). 
+       > [`MACS2`](https://github.com/macs3-project/MACS) has two different specific methods in searching for enrichment regions. [`Broad peaks`](https://hbctraining.github.io/Intro-to-ChIPseq/lessons/05_peak_calling_macs.html ) or broad domains (i.e. histone modifications that cover entire gene bodies) or [`narrow peaks`](https://hbctraining.github.io/Intro-to-ChIPseq/lessons/05_peak_calling_macs.html ) (i.e. a transcription factor binding). Narrow peaks are easier to detect as we are looking for regions that have higher amplitude and are easier to distinguish from the background, compared to broad or dispersed marks.
+  
+ * **Specific parameters**:
+    - **upstream_limit**: indicate the window length you desire to define as a promoter region or TSS (transcription start site) upstream the peak identified, in the analysis of the possible target genes. For more information, visit[`ChIPseeker`](https://bioconductor.org/packages/release/bioc/html/ChIPseeker.html).
+    - **downstream_limit**: indicate the window length you desire to define as a promoter region or TSS (transcription start site) downstream the peak identified, in the analysis of the possible target genes. For more information, visit [`ChIPseeker`](https://bioconductor.org/packages/release/bioc/html/ChIPseeker.html).
+    - **motif_length**: indicate the length of motifs to be found. The length of time it takes to find motifs increases greatly with increasing size.  In general, it is recommended to start searching for enrichment with shorter lengths (i.e. less than 15) before trying longer lengths. For more information, visit [`Homer`](http://homer.ucsd.edu/homer/download.html)
+    - **motif_size**: indicate the size of the region analyze when searching for motifs. For example, if it you are aimed at register ChIP-Seq peaks from a transcription factor, it is recommended a value between 50-200, whereas if you are interested in histone marked regions, 500-1000 would be suitable. For more information, visit [`Homer`](http://homer.ucsd.edu/homer/download.html)
+    - **chromosome**: indicate the chromosome you are referring to
 
 ### Output and how to interpret the results
 
@@ -140,9 +150,9 @@ The directories listed below will be created in the output directory after the p
 <details markdown="1">
     <summary>Output files</summary>
 
-      ```bash 
-      <working_directory>/<analysis_name>/samples/sample_<#>
-      ```
+```bash 
+<working_directory>/<analysis_name>/samples/sample_<#>
+```
   
 `*_fastqc.html`: FastQC report containing quality metrics for read 1 (and read2 if paired-end).
 
@@ -157,9 +167,9 @@ The directories listed below will be created in the output directory after the p
 <details markdown="1">
     <summary>Output files</summary>
 
-      ```bash 
-      <working_directory>/<analysis_name>/genome
-      ```
+```bash 
+<working_directory>/<analysis_name>/genome
+```
 
 `index.1.bt2`,`index.2.bt2`,`index.3.bt2`,`index.4.bt2`,`index.rev.1.bt2`
 
@@ -180,9 +190,9 @@ The pipeline uses in the first place [`samtools sort`](http://www.htslib.org/doc
 <details markdown="1">
     <summary>Output files</summary>
     
-      ```bash
-      <working_directory>/<analysis_name>/samples/sample_<number_samples>
-      ```
+```bash
+<working_directory>/<analysis_name>/samples/sample_<#>
+```
     
 `*.bam`: file generated by samtools sort, sorting and converting *.sam file generated by bowtie2 into a *.bam file
 `*.bam.bai`: file generated by samtools index where *.bam file is indexed.
@@ -198,9 +208,9 @@ As indicated previously in the description of Input parameters, calling can be d
 <details markdown="1">
     <summary>Output files</summary>
     
-      ```bash
-      <working_directory>/<analysis_name>/results
-      ```
+```bash
+<working_directory>/<analysis_name>/results
+```
     
 `*peaks.xls`: is a tabular file which contains information about called peaks. You can open it in excel and sort/filter using excel functions. It does includes:
 
@@ -239,19 +249,29 @@ There are several workflows for running motif analysis with [`HOMER`](http://hom
 <details markdown="1">
     <summary>Output files</summary>
     
-      ```bash
-      <working_directory>/<analysis_name>/results/motifs_sample<#>
-      ```
+```bash
+<working_directory>/<analysis_name>/results/motifs_sample<#>
+```
      
 `homerMotifs.motifs<#>`: output files from the de novo motif finding, separated by motif length, and represent separate runs of the algorithm.
+
 `homerMotifs.all.motifs`: file composed of all the homerMotifs.motifs<#> files.
+
 `knownResults.html`: formatted output of known motif finding.
+
 `knownResults/ directory`: contains files for the knownResults.html webpage, including known<#>.motif files for use in finding specific instance of each motif.
+
 `knownResults.txt`: text file containing statistics about known motif enrichment. By default is opened in Text.editor. For optimized view, open manually in Excel.
+
 `homerResults.html`: formatted output of de novo motif finding.
+
 `homerResults/ directory`: contains files for the homerResults.html webpage, including motif<#>.motif files for use in finding specific instance of each motif.
+
 `seq.autonorm.tsv`: autonormalization statistics for lower-order oligo normalization.
+
 `motifFindingParameters.txt`: command used to execute findMotifsGenome.pl
+
+</details>
 
 ## Contribution and Support
 
