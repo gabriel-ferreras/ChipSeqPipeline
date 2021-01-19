@@ -25,15 +25,15 @@ The pipeline hereby presented was designed in order to perform a complete proces
     * Submit peak_determination.sh for each sample
  3. **peak_determination.sh**
     * Peak determination ([`masc2 callpeak`](https://github.com/macs3-project/MACS))
-    * eak annotation
+    * Peak annotation by submitting target_genes.R for each sample
     * Homer-motifs-finding ([`findMotifsGenome.pl`](http://homer.ucsd.edu/homer/ngs/peakMotifs.html))
-    * Experiment global analysis
+    * Perform a final experiment global analysis by submitting exp_analysis.R for each experiment
  4. **target_genes.R**
     * Install packages
-    * Read arguments
+    * Read arguments 
     * Read peak file
-    * Definition of promoter region
-    * Peak annotation
+    * Definition of promoter region 
+    * Peak annotation 
     * Convert annotation to target genes
  5. **exp_analysis.R**
     * Install packages
@@ -46,18 +46,21 @@ The pipeline hereby presented was designed in order to perform a complete proces
 ## What does it do?
 
   * Quality control reads using fastQC 
-  * Map reads to genome using Bowtie2
-  * Call peaks for multiple combinations of samples using MACS2
+  * Map reads to reference genome using Bowtie2
+  * Call peaks for each sample using MACS2
   * Motifs-finding using findMotifsGenome.pl
-  * A differential analysis using R
+  * Asociation of the peaks to target genes using ChIPseeker
+  * Overlap of target genes from samples using Venndiagram
+  * Analysis of enrichment in terms of gene ontology (GO) and Kyoto Encycopedia of Genes and Genomes (KEGG) using clusterProfiler
 
 ## What does it output?
 
   * QC reports
   * Genome index
-  * Bam files
+  * Bam and bam.bai files
   * Peak annotation files
-  * Differential analysis report
+  * Motifs-finding analysis reports
+  * Analysis of enrichment in terms of gene ontology (GO) and Kyoto Encycopedia of Genes and Genomes (KEGG) analysis plots
 
 ## Dependencies
 
@@ -106,17 +109,19 @@ The pipeline requires a file as input to specify the samples and the design of t
 
  * **General parameters**:
     - **analysis_name**: is the name you desire to give to the analysis. The folder created during the process will carry this name.
-    - **number_samples**: the number of samples that are going to be processed. Count the pair Chip/Control just as one sample. Does not matter wether if the samples are paired or not.
+    - **number_samples**: the number of samples that are going to be processed. Count the pair Chip/Control just as one sample. Does not matter whether the samples are paired or not.
     - **number_experiments**: the number of experiments that are going to be processed
     - **experimental_design**: specify the samples that correspond to each experiment. For example, if there are two experiments and each experiment has two samples, indicate it as "(1, 1, 2, 2 )"
  
  * **Directories**:
     - **working_directory**: the directory where all the data is going to be placed during the analysis
     - **installation_directory**: the directory where the repository is placed
-    - **path_annotation**: the directory where the annotation is placed
-    - **path_genome**: the directory where the genome is placed
-    - **path_chip_1**: the directory where the chip samples are placed
-    - **path_control_1**: the directory where the control samples are placed  
+    
+ * **Paths**:
+    - **path_annotation**: the path to where the annotation is placed, including the file.
+    - **path_genome**: the path to where the genome is placed, including the file.
+    - **path_chip_1**: the path to where the chip samples are placed, including the file. If there are more than one sample, you must also indicate the path to those by adding a parameter called "path_chip_#", where "#" stands for the number of the sample.
+    - **path_control_1**: the path to where the control samples are placed, including the file.If there are more than one sample, you must also indicate the path to those by adding a parameter called "path_control_#", where "#" stands for the number of the sample.
     
  * **Eligible parameters**:
     - **paired**: indicate whether the samples are from a paired-end sequencing (True/1) or a single-end sequencing (False/0).
@@ -130,7 +135,7 @@ The pipeline requires a file as input to specify the samples and the design of t
     - **downstream_limit**: indicate the window length you desire to define as a promoter region or TSS (transcription start site) downstream the peak identified, in the analysis of the possible target genes. For more information, visit [`ChIPseeker`](https://bioconductor.org/packages/release/bioc/html/ChIPseeker.html).
     - **motif_length**: indicate the length of motifs to be found. The length of time it takes to find motifs increases greatly with increasing size.  In general, it is recommended to start searching for enrichment with shorter lengths (i.e. less than 15) before trying longer lengths. For more information, visit [`Homer`](http://homer.ucsd.edu/homer/download.html)
     - **motif_size**: indicate the size of the region analyze when searching for motifs. For example, if it you are aimed at register ChIP-Seq peaks from a transcription factor, it is recommended a value between 50-200, whereas if you are interested in histone marked regions, 500-1000 would be suitable. For more information, visit [`Homer`](http://homer.ucsd.edu/homer/download.html)
-    - **chromosome**: indicate the chromosome you are referring to
+    - **chromosome**: indicate the universe you are refering to when performing [`Gene Ontology (GO)`](http://geneontology.org/docs/go-enrichment-analysis/) enrichment. This parameter can take several values: `ALL`, if you are referring to the whole genome; `C`, if you are referring to chloroplast DNA; `M`, if you are referring to mitochondrial DNA; or a `number` if you are referring to a certain chromosome.
 
 ### Output and how to interpret the results
 
@@ -201,7 +206,7 @@ The pipeline uses in the first place [`samtools sort`](http://www.htslib.org/doc
 
 #### Call peaks
 
-[`MACS`](https://hbctraining.github.io/Intro-to-ChIPseq/lessons/05_peak_calling_macs.html) (Model-based Analysis of ChIP-Seq) is one of the most common algorithm for identifying transcript factor binding sites, so called peak-calling. [`MACS`](https://hbctraining.github.io/Intro-to-ChIPseq/lessons/05_peak_calling_macs.html) evaluate the significance of enriched ChIP regions and find out the binding sites through combining the information of both sequencing tag position and orientation.
+[`MACS`](https://hbctraining.github.io/Intro-to-ChIPseq/lessons/05_peak_calling_macs.html) (Model-based Analysis of ChIP-Seq) is one of the most common algorithm for identifying transcript factor binding sites, so called peak-calling, evaluate the significance of enriched ChIP regions and find out the binding sites through combining the information of both sequencing tag position and orientation. Peaks are therefore define as regiones in the genome where there is an accumulation of lectures, indicating the binding of a transcript factor.
 
 As indicated previously in the description of Input parameters, calling can be done in a broad manner (True/1) or as in narrow manner (False/0). In this sense, if broad-peaks are called, the algorithm will put nearby highly enriched regions into a broad region with loose cutoff
 
@@ -240,7 +245,7 @@ If the pipeline is run in a broad peak mode, this file will be called *.peaks.br
 
 </details>
 
-#### Motif finding
+#### Motifs finding
 
 [`HOMER`](http://homer.ucsd.edu/homer/index.html) (Hypergeometric Optimization of Motif EnRichment) is a suite of tools for Motif Discovery and next-generation sequencing analysis. It contains a novel motif discovery algorithm that was designed for regulatory element analysis in genomics applications. It is a differential motif discovery algorithm, which means that it takes two sets of sequences and tries to identify the regulatory elements that are specifically enriched in on set relative to the other.
 
@@ -270,6 +275,68 @@ There are several workflows for running motif analysis with [`HOMER`](http://hom
 `seq.autonorm.tsv`: autonormalization statistics for lower-order oligo normalization.
 
 `motifFindingParameters.txt`: command used to execute findMotifsGenome.pl
+
+</details>
+
+#### Association of the peaks to target genes
+
+[`ChIPseeker`](https://bioconductor.org/packages/release/bioc/html/ChIPseeker.html) is a package that implements the functions necessary for retrieving the nearest genes around the peak, annotate genomic region of the peak and  estimate the significance of overlap among ChIP peak data sets, among other functions. The criteria selected for the determination of the genes is the Nearest Downstream Gene (NDG), selecting the nearest downstream genes on both strands
+
+This comparison between the data results from chip and control samples can be used to infer the cooperative regulation that is taken place and generate different hypotheses. In addition, several visualization functions are implemented to summarize the finding of the analysis.
+
+<details markdown="1">
+    <summary>Output files</summary>
+    
+```bash
+<working_directory>/<analysis_name>/results
+```
+
+`peak_targetgenes.txt`: text file including the genes of *Arabidopsis thaliana* that correspond to the peaks analysed in chip samples 
+
+`summit_targetgenes.txt`: text file including the genes of *Arabidopsis thaliana* that correspond to the peaks analysed in control samples 
+
+`R.plots`: a pdf file including all the plots generated during the sample processing. These plots are:
+
+  - Pie plot of the peaks registered in the chip samples
+  - Pie plot of the peaks registered in the control samples
+  - Bar plot of the peaks registered in the chip samples
+  - Bar plot of the peaks registered in the control samples
+
+</details>
+
+#### Generate the potentital regulome of the transcription factor
+
+[`VennDiagram`](https://www.rdocumentation.org/packages/VennDiagram/versions/1.6.20) is a package that implement a series of functions in order to generate high-resolution Venn and Euler plots. It will be used to extract from the peak_targetgenes.txt of all samples all the genes that were discovered and associate with a peak and calculate the overlapping among them, obtaining the potential regulome of the transcription factor studied. The regulome is define as the global set of genes regulated by a transcription factor under certain circumstances and it is found from the cistrome, the set of places where the transcription factor binds under those certain conditions, which is determined in turn by the association of peaks with target genes.
+
+<details markdown="1">
+    <summary>Output files</summary>
+    
+```bash
+<working_directory>/<analysis_name>/results
+```
+
+`regulome.txt`: text file containing all the genes that constitute the regulome of the transcription factor
+
+`R.plots`: a pdf file including all the plots generated during the sample processing.
+
+</details>
+
+#### Gene ontology enrichment (GO) and Kyoto Encycopedia of Genes and Genomes (KEGG)
+
+[`clusterProfiler`](https://bioconductor.org/packages/release/bioc/html/clusterProfiler.html) is a package that implements methods to analyze and visualize functional profiles of gene and gene clusters, these are, gene ontology enrichment (GO) and Kyoto Encycopedia of Genes and Genomes (KEGG). It is performed once the sample analysis has been fully completed and therefore it is possible to compare the results between samples for a given experiment or condition, being applied only to those genes that are present in all samples. This analysis will associate possible functions to the transciption factor studied.
+
+The [`Gene Ontology (GO)`](http://geneontology.org/docs/go-enrichment-analysis/) refers to a structured and specific terminology to describe biological processes, cellular components or molecular functions in a a systematic (and therefore faster) and unequivocal way. As the intereset is to find those items that, as a onsequence of the treatment or mutation, a enrichment is performed, a mathematical-computational method that determines if there are GO terms in a set of genes that appear with statistical significance with respect to the genome of the organism.
+
+The [`Kyoto Encyclopedia of Genes and Genomes (KEGG)`](https://www.genome.jp/kegg/) is a database intended for the study of High-level biological functions and utilities from large-scale molecular information from genomic or transcriptomic analysis. Therefore, performing a KEGG analysis is very similar to that perform in Go terms, but at a higher functional level, of complete metabolic or regulatory pathways, rather than at the level of specific biological functions or processes.
+
+<details markdown="1">
+    <summary>Output files</summary>
+    
+```bash
+<working_directory>/<analysis_name>/results
+```
+
+`R.plots`: a pdf file including all the plots generated during the sample processing.
 
 </details>
 
