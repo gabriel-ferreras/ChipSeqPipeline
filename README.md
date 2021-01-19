@@ -1,5 +1,5 @@
 # ChipSeqPipeline
-Bash pipeline for Chip-Seq data processing and analysis.
+Bash pipeline for *Arabidopsis thaliana* Chip-Seq data processing and analysis.
 
 Authors: 
   * Antonio Álvarez Gómez
@@ -8,7 +8,7 @@ Authors:
 
 ## Introduction
 
-The pipeline hereby presented was designed in order to ChIP-seq (Chromatin ImmunopreciPitation sequencing) data processing and analysis. This material is a task of the course "Omics technologies and Bioinformatics" given by Francisco J. Romero-Campero and Ignacio Pérez Hurtado de Mendoza in the Biochemistry degree at the University of Seville.
+The pipeline hereby presented was designed in order to perform a complete processing and analysis of ChIP-seq (Chromatin ImmunopreciPitation sequencing) from the plant model *Arabidopsis thaliana*. This material is part of the course "Omics technologies and Bioinformatics" given by Francisco J. Romero-Campero and Ignacio Pérez Hurtado de Mendoza in the Biochemistry degree at the University of Seville.
 
 ## Pipeline summary
 
@@ -17,25 +17,25 @@ The pipeline hereby presented was designed in order to ChIP-seq (Chromatin Immun
    * Prepare workspace
    * Copy the data
    * Create a genome index ([`bowtie2-build`](http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml))
-   * Sample processing
- 2. **SampleProcessing.sh**
+   * Submit chip_sample_processing.sh and control_sample_processing for each sample
+ 2. **chip_sample_processing.sh** and **control_sample_processing.sh** 
     * Quality control ([`fastqc`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/))
     * Map to genome ([`bowtie2`](http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml))
     * Generate sorted bam file ([`samtools`](http://www.htslib.org))
-    * Peak determination
- 3. **PeakDetermination.sh**
+    * Submit peak_determination.sh for each sample
+ 3. **peak_determination.sh**
     * Peak determination ([`masc2 callpeak`](https://github.com/macs3-project/MACS))
-    * Peak annotation
+    * eak annotation
     * Homer-motifs-finding ([`findMotifsGenome.pl`](http://homer.ucsd.edu/homer/ngs/peakMotifs.html))
     * Experiment global analysis
- 4. **PeakAnnotation.R**
+ 4. **target_genes.R**
     * Install packages
     * Read arguments
     * Read peak file
     * Definition of promoter region
     * Peak annotation
     * Convert annotation to target genes
- 5. **ExperimentGlobalAnalysis.R**
+ 5. **exp_analysis.R**
     * Install packages
     * Read arguments
     * Group the replicates
