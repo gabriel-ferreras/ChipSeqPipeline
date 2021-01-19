@@ -67,7 +67,7 @@ For running this pipeline, you need to assure that the following softwares are i
   * [`Bowtie2`](http://bowtie-bio.sourceforge.net/bowtie2/index.shtml)
   * [`SAMTOOLS`](https://sourceforge.net/projects/samtools/files/samtools/)
   * [`MACS2`](https://github.com/macs3-project/MACS)
-  * [`R`](https://www.r-project.org)
+  * [`R`](https://www.r-project.org), with the following packages:
     - [`BiocManager`](https://cran.r-project.org/web/packages/BiocManager/vignettes/BiocManager.html)
     - [`ChIPseeker`](https://bioconductor.org/packages/release/bioc/html/ChIPseeker.html)
     - [`TxDb.Athaliana.BioMart.plantsmart28`](https://bioconductor.org/packages/release/data/annotation/html/TxDb.Athaliana.BioMart.plantsmart28.html)
