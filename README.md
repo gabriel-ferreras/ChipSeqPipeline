@@ -193,11 +193,11 @@ The directories listed below will be created in the output directory after the p
 
 [`Bowtie2`](http://bowtie-bio.sourceforge.net/bowtie2/index.shtml) is an ultrafast and memory-efficient tool for aligning sequencing reads to long reference sequences. It is used for mapping the samples to the genome, which has been previously indexed.
 
-[`Bowtie2`](http://bowtie-bio.sourceforge.net/bowtie2/index.shtml) outputs alignments in [`SAM`](http://samtools.github.io/hts-specs/SAMv1.pdf) (Sequence Alignment/Map) format, enabling interoperation with a large number of other tools, including ([`samtools`](http://www.htslib.org). 
+[`Bowtie2`](http://bowtie-bio.sourceforge.net/bowtie2/index.shtml) outputs alignments in [`SAM`](http://samtools.github.io/hts-specs/SAMv1.pdf) (Sequence Alignment/Map) format, enabling interoperation with a large number of other tools, including [`samtools`](http://www.htslib.org). 
 
    > Note that *.sam* files, as well as the initial *.fastq.gz* files, will be deleted once they are processed, so they will not appear in the final results.
 
-([`Samtools`](http://www.htslib.org) is a set of utilities that manipulate alignments in the [`BAM`](https://support.illumina.com/help/BS_App_RNASeq_Alignment_OLH_1000000006112/Content/Source/Informatics/BAM-Format.htm) (Binary Alignment/ Map) format. It imports from and exports to the [`SAM`](http://samtools.github.io/hts-specs/SAMv1.pdf) (Sequence Alignment/Map) format, does sorting, merging and indexing, and allows to retrieve reads in any regions swiftly.
+[`Samtools`](http://www.htslib.org) is a set of utilities that manipulate alignments in the [`BAM`](https://support.illumina.com/help/BS_App_RNASeq_Alignment_OLH_1000000006112/Content/Source/Informatics/BAM-Format.htm) (Binary Alignment/ Map) format. It imports from and exports to the [`SAM`](http://samtools.github.io/hts-specs/SAMv1.pdf) (Sequence Alignment/Map) format, does sorting, merging and indexing, and allows to retrieve reads in any regions swiftly.
 
 The pipeline uses in the first place [`samtools sort`](http://www.htslib.org/doc/samtools-sort.html), sorting and converting the *.sam* file generated previously into a *.bam file*. A BAM file is the compressed binary version of a SAM file. As the *.bam file* is still too large to work with, it is later indexed by using [`samtools index`](http://www.htslib.org/doc/samtools-index.html), generating a *bam.bai* file.
 
