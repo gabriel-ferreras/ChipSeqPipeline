@@ -233,13 +233,13 @@ As indicated previously in Input parameters section, calling can be done in a br
    
 `<analysis_name>_sample_<i>_peaks.narrowPeak`: contains the peak locations together with peak summit, p-value, and q-value. You can load it to the UCSC genome browser. Definition of some specific columns are:
 
-   * 5th: integer score for display. It's calculated as int(-10*log10pvalue) or int(-10*log10qvalue) depending on whether -p (pvalue) or -q (qvalue) is used as score cutoff. Please note that currently this value might be out of the [0-1000] range defined in UCSC ENCODE narrowPeak format.
+   * 5th: integer score for display. It's calculated as int(-10·log10pvalue) or int(-10·log10qvalue) depending on whether -p (pvalue) or -q (qvalue) is used as score cutoff. Please note that currently this value might be out of the [0-1000] range defined in UCSC ENCODE narrowPeak format.
    * 7th: fold-change at peak summit
    * 8th: -log10pvalue at peak summit
    * 9th: -log10qvalue at peak summit
    * 10th: relative summit position to peak start
 
-If the pipeline is run in a broad peak mode, this file will be called *<analysis_name>_sample_<i>_peaks.broadPeak*, offering same piece of information, except for 10th column, as this mode will not register peak summits.
+If the pipeline is run in a broad peak mode, this file will be called `<analysis_name>_sample_<i>_peaks.broadPeak`, offering same piece of information, except for 10th column, as this mode will not register peak summits.
 
 `<analysis_name>_sample_<i>_summits.bed`: file in BED format containing the peak summits locations for every peak. The file can be loaded directly to the UCSC genome browser. This file is useful if you are aimed to find the motifs at the binding sites.
 
@@ -286,7 +286,7 @@ There are several workflows for running motif analysis with [`HOMER`](http://hom
 
 The criteria selected for the determination of target genes (that is, the potential regulome of the transcription factor) is Nearest Downstream Gene (NDG), associating to each peak its nearest downstream gene. This is based on the assumption that transcription factors usually bind to promoters, that is, 5' of the regulated gene. Among the two genes on each strand, the closest one is chosen as the target gene. 
 
-This peak annotation is applied both to the peaks (either *.narrowPeak* or *.broadPeak* files) and the summits (*.bed* files). Apart from the determination of target genes, several visualization functions are implemented to summarize the finding of the analysis.
+This peak annotation is applied both to the peaks (either *.narrowPeak* or *.broadPeak* files) and the summits (*.bed* files). Apart from the determination of target genes, several visualization functions are implemented to summarize the findings of the analysis.
 
 <details markdown="1">
     <summary>Output files</summary>
@@ -335,7 +335,9 @@ The [`Gene Ontology (GO)`](http://geneontology.org/docs/go-enrichment-analysis/)
 
 The [`Kyoto Encyclopedia of Genes and Genomes (KEGG)`](https://www.genome.jp/kegg/) is a database intended for the study of High-level biological functions and utilities from large-scale molecular information from genomic or transcriptomic analysis. Therefore, performing a KEGG analysis is very similar to that perform in GO terms, but at a higher functional level, of complete metabolic or regulatory pathways, rather than at the level of specific biological functions or processes.
 
-These enrichment analyses, both of GO and KEGG, are perfomed using *clusterProfiler* for the lists of overlapping target genes from all the replicates of each experiment, and will enable the association of possible functions to the transcription factor studied.
+These enrichment analyses, both of GO and KEGG, are perfomed using *clusterProfiler* for the lists of overlapping target genes from all the replicates of each experiment, and will enable the association of possible functions to the transcription factor studied. Apart from the enrichment analysis of target genes, several visualization functions are implemented to summarize the results. In the case of KEGG enrichment, the package [`pathview`](https://bioconductor.org/packages/release/bioc/html/pathview.html) from Bioconductor, specifically the *pathway()* function, is used to obtain a detailed KEGG pathway visualization of the KEGG enrichment results.
+
+> [`Pathview`](https://bioconductor.org/packages/release/bioc/html/pathview.html) is a tool set for pathway based data integration and visualization. It maps and renders user data on relevant pathway graphs. All users need is to supply their gene or compound data and specify the target pathway. Pathview automatically downloads the pathway graph data, parses the data file, maps user data to the pathway, and render pathway graph with the mapped data.
 
 <details markdown="1">
     <summary>Output files</summary>
@@ -344,28 +346,40 @@ These enrichment analyses, both of GO and KEGG, are perfomed using *clusterProfi
 <working_directory>/<analysis_name>/results/exp_<j>_result
 ```
 `<analysis_name>_experiment_<j>_BP_GOs.txt`: text file containing the enriched biological process GO terms found for the overlapping target gene list. Could be empty if no enriched terms are found.
+
 `<analysis_name>_experiment_<j>_MF_GOs.txt`: text file containing the enriched molecular function GO terms found for the overlapping target gene list. Could be empty if no enriched terms are found.
+
 `<analysis_name>_experiment_<j>_CC_GOs.txt`: text file containing the enriched celullar component GO terms found for the overlapping target gene list. Could be empty if no enriched terms are found.
+
 `<analysis_name>_experiment_<j>_KEGGs.txt`: text file containing the enriched KEGG terms found for the overlapping target gene list. Could be empty if no enriched terms are found.
+
 `R.plots`: a pdf file including all the plots generated during the enrichment analysis. These plots are, always in this order:
   1. Bar plot of enriched biological process GO terms, generated by *batplot()*, showing 20 categories.
   2. Dot plot of enriched biological process GO terms, generated by *dotplot()*, showing 20 categories.
   3. Cnet plot of enriched biological process GO terms, generated by *cnetplot()*.
-  4. Ema plot of enriched biological process GO terms, generated by *emapplot()*.
+  4. Emap plot of enriched biological process GO terms, generated by *emapplot()*.
   5. Go plot of enriched biological process GO terms, generated by *goplot()*.
   6. Bar plot of enriched molecular function GO terms, generated by *batplot()*, showing 20 categories.
   7. Dot plot of enriched molecular function GO terms, generated by *dotplot()*, showing 20 categories.
   8. Cnet plot of enriched molecular function GO terms, generated by *cnetplot()*.
-  9. Ema plot of enriched molecular function GO terms, generated by *emapplot()*.
+  9. Emap plot of enriched molecular function GO terms, generated by *emapplot()*.
   10. Go plot of enriched molecular function GO terms, generated by *goplot()*.
   11. Bar plot of enriched celullar component GO terms, generated by *batplot()*, showing 20 categories.
   12. Dot plot of enriched celullar component GO terms, generated by *dotplot()*, showing 20 categories.
   13. Cnet plot of enriched celullar component GO terms, generated by *cnetplot()*.
-  14. Ema plot of enriched celullar component GO terms, generated by *emapplot()*.
+  14. Emap plot of enriched celullar component GO terms, generated by *emapplot()*.
   15. Go plot of enriched celullar component GO terms, generated by *goplot()*.
   11. Bar plot of enriched KEGG terms, generated by *batplot()*, showing 10 categories.
   12. Dot plot of enriched KEGG GO terms, generated by *dotplot()*, showing 10 categories.
- 
+
+However, it must be taken into account that these plots will only be generated if at least 1 (or 2 for the case of emap and go plots) enriched term, either GO or KEGG, is found.
+
+`ath<KEGG_ID>.png`: a png file with the general representation of the KEGG pathway, one for each enriched KEGG pathway identified.
+
+`ath<KEGG_ID>.pathview.png`: a png file with the representation of the KEGG pathway, indicating via color coding the enriched genes found in the analysis, one for each enriched KEGG pathway identified.
+
+`ath<KEGG_ID>.xml`: a png file containing the information neccesary for the KEGG pathway representation by pathview.
+
 </details>
 
 ## Contribution and Support
