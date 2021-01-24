@@ -10,57 +10,65 @@ Authors:
 
 The pipeline hereby presented was designed in order to perform a complete processing and analysis of ChIP-seq (Chromatin ImmunopreciPitation sequencing) data from the plant model *Arabidopsis thaliana*. This material is part of the course "Omics technologies and Bioinformatics" given by Francisco J. Romero Campero and Ignacio Pérez Hurtado de Mendoza in the Biochemistry degree at the University of Seville.
 
+## Definition of terms used
+
+In this software, **sample** refers to each pair of Chip and control sequencing data that will be compared for the peak determination, and therefore will generate one set of results in the form of peak and summit files, among others. Meanwhile, **experiment** referes to each ChIP-seq analysis conducted, that is, each set of conditions for the inmunoprecipitation of chromatin, as these pipeline allows for the analysis of different experiments for different transcription factors or histone modifications, or different experimental conditions. Each experiment will be composed of one or more sample, these samples being replicates of the same experimental design and conditions. For each experiment the pipeline will generate several global results, such as a list of overlapping genes among replicates and list of enriched GO and KEGG terms. Finally, by **analysis** we refer to the general name of the study, composed of one or more experiments.
+
+For example, one analysis could me made of two experiments for two related transcription factors, and each one of these two experiments could have two biological replicates of the same experimental conditions.
+
 ## Pipeline summary
 
 1. **ChipSeqPipeline.sh**
-   * Read parameters
-   * Prepare workspace
-   * Copy the data
-   * Create a genome index ([`bowtie2-build`](http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml))
-   * Submit chip_sample_processing.sh and control_sample_processing for each sample
+   * Read parameters.
+   * Prepare workspace.
+   * Copy the data.
+   * Create a genome index ([`bowtie2-build`](http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml)).
+   * Submit chip_sample_processing.sh and control_sample_processing for each sample.
  2. **chip_sample_processing.sh** and **control_sample_processing.sh** 
-    * Quality control ([`fastqc`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/))
-    * Map to reference genome ([`bowtie2`](http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml))
-    * Generate sorted bam file ([`samtools`](http://www.htslib.org))
-    * Submit peak_determination.sh for each sample
+    * Quality control ([`fastqc`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)).
+    * Map to reference genome ([`bowtie2`](http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml)).
+    * Generate sorted bam file ([`samtools`](http://www.htslib.org)).
+    * Submit peak_determination.sh for each sample.
  3. **peak_determination.sh**
-    * Peak determination ([`masc2 callpeak`](https://github.com/macs3-project/MACS))
-    * Peak annotation by submitting *target_genes.R* for each sample
-    * Homer-motifs-finding ([`findMotifsGenome.pl`](http://homer.ucsd.edu/homer/ngs/peakMotifs.html))
-    * Overlapping target genes for replicates, GO and KEGG enrichment by submitting *exp_analysis.R* for each experiment
+    * Peak determination ([`masc2 callpeak`](https://github.com/macs3-project/MACS)).
+    * Peak annotation by submitting *target_genes.R* for each sample.
+    * Homer-motifs-finding ([`findMotifsGenome.pl`](http://homer.ucsd.edu/homer/ngs/peakMotifs.html)).
+    * Overlapping target genes for replicates, GO and KEGG enrichment by submitting *exp_analysis.R* for each experiment.
  4. **target_genes.R**
-    * Install packages if neccesary ([`BiocManager`](https://cran.r-project.org/web/packages/BiocManager/vignettes/BiocManager.html))
-    * Read arguments 
-    * Read peak file ([`ChIPseeker`](https://bioconductor.org/packages/release/bioc/html/ChIPseeker.html))
-    * Definition of promoter region ([`ChIPseeker`](https://bioconductor.org/packages/release/bioc/html/ChIPseeker.html))
-    * Peak annotation ([`ChIPseeker`](https://bioconductor.org/packages/release/bioc/html/ChIPseeker.html),[`DO.db`](http://bioconductor.org/packages/release/data/annotation/html/DO.db.html))
-    * Extract target genes from annotation
+    * Install packages if neccesary ([`BiocManager`](https://cran.r-project.org/web/packages/BiocManager/vignettes/BiocManager.html)).
+    * Read arguments.
+    * Read peak file ([`ChIPseeker`](https://bioconductor.org/packages/release/bioc/html/ChIPseeker.html)).
+    * Definition of promoter region ([`ChIPseeker`](https://bioconductor.org/packages/release/bioc/html/ChIPseeker.html)).
+    * Peak annotation ([`ChIPseeker`](https://bioconductor.org/packages/release/bioc/html/ChIPseeker.html),[`DO.db`](http://bioconductor.org/packages/release/data/annotation/html/DO.db.html)).
+    * Extract target genes from annotation.
  5. **exp_analysis.R**
-    * Install packages if neccesary ([`BiocManager`](https://cran.r-project.org/web/packages/BiocManager/vignettes/BiocManager.html))
-    * Read arguments
-    * Read target gene files for each replicate
-    * Extraction of overlapping genes in all replicates ([`VennDiagram`](https://cran.r-project.org/web/packages/VennDiagram/VennDiagram.pdf))
-    * Gene ontology enrichment ([`clusterProfiler`](https://bioconductor.org/packages/release/bioc/html/clusterProfiler.html),[`TxDb.Athaliana.BioMart.plantsmart28`](https://bioconductor.org/packages/release/data/annotation/html/TxDb.Athaliana.BioMart.plantsmart28.html),[`pathview`](https://bioconductor.org/packages/release/bioc/html/pathview.html),[`org.At.tair.db`](https://bioconductor.org/packages/release/data/annotation/html/org.At.tair.db.html))
-    * KEGG pathway enrichment ([`clusterProfiler`](https://bioconductor.org/packages/release/bioc/html/clusterProfiler.html),[`TxDb.Athaliana.BioMart.plantsmart28`](https://bioconductor.org/packages/release/data/annotation/html/TxDb.Athaliana.BioMart.plantsmart28.html),[`pathview`](https://bioconductor.org/packages/release/bioc/html/pathview.html),[`org.At.tair.db`](https://bioconductor.org/packages/release/data/annotation/html/org.At.tair.db.html))
+    * Install packages if neccesary ([`BiocManager`](https://cran.r-project.org/web/packages/BiocManager/vignettes/BiocManager.html)).
+    * Read arguments.
+    * Read target gene files for each replicate.
+    * Extraction of overlapping genes in all replicates ([`VennDiagram`](https://cran.r-project.org/web/packages/VennDiagram/VennDiagram.pdf)).
+    * Gene ontology enrichment ([`clusterProfiler`](https://bioconductor.org/packages/release/bioc/html/clusterProfiler.html),[`TxDb.Athaliana.BioMart.plantsmart28`](https://bioconductor.org/packages/release/data/annotation/html/TxDb.Athaliana.BioMart.plantsmart28.html),[`org.At.tair.db`](https://bioconductor.org/packages/release/data/annotation/html/org.At.tair.db.html)).
+    * KEGG pathway enrichment ([`clusterProfiler`](https://bioconductor.org/packages/release/bioc/html/clusterProfiler.html),[`TxDb.Athaliana.BioMart.plantsmart28`](https://bioconductor.org/packages/release/data/annotation/html/TxDb.Athaliana.BioMart.plantsmart28.html),[`org.At.tair.db`](https://bioconductor.org/packages/release/data/annotation/html/org.At.tair.db.html),[`pathview`](https://bioconductor.org/packages/release/bioc/html/pathview.html)).
 
 ## What does it do?
 
-  * Quality control reads using fastQC 
-  * Map reads to reference genome using Bowtie2
-  * Call peaks for each sample (chip-control pair) using MACS2
-  * Motifs-finding using findMotifsGenome.pl for each sample (chip-control pair)
-  * Asociation of the peaks to target genes using ChIPseeker
-  * Overlap of target genes from samples using VennDiagram
-  * Analysis of enrichment in terms of gene ontology (GO) and Kyoto Encycopedia of Genes and Genomes (KEGG) using clusterProfiler
+  * Quality control reads using fastQC.
+  * Map reads to reference genome using Bowtie2.
+  * Call peaks for each sample using MACS2.
+  * Motifs-finding using findMotifsGenome.pl for each sample.
+  * Asociation of the peaks to target genes using ChIPseeker.
+  * Overlap of target genes from samples using VennDiagram.
+  * Analysis of enrichment in terms of gene ontology (GO) and Kyoto Encycopedia of Genes and Genomes (KEGG) using clusterProfiler.
 
 ## What does it output?
 
-  * QC reports
-  * Genome index
-  * Bam and bam.bai files
-  * Peak annotation files
-  * Motifs-finding analysis reports
-  * Analysis of enrichment in terms of gene ontology (GO) and Kyoto Encycopedia of Genes and Genomes (KEGG) analysis plots
+  * QC reports for each fastq file.
+  * Genome index.
+  * Bam and bam.bai files for each fastq file.
+  * Peak calling result files for each sample.
+  * Peak annotation files (target genes) for each sample.
+  * Motifs-finding analysis reports for each sample.
+  * List of overlapping target genes (potential regulome) among replicates for each experiment.
+  * Enrichment analysis in terms of gene ontology (GO) and Kyoto Encycopedia of Genes and Genomes (KEGG) results (terms lists and plots) for each experiment.
 
 ## Dependencies
 
@@ -160,9 +168,9 @@ The directories listed below will be created in the output directory after the p
 <working_directory>/<analysis_name>/samples/sample_<i>
 ```
   
-`*_fastqc.html`: FastQC report containing quality metrics for read 1 (and read2 if paired-end).
+`sample_<i>_fastqc.html`: FastQC report containing quality metrics for read 1 (and read2 if paired-end).
 
-`*_fastqc.zip`: Zip archive containing the FastQC report, tab-delimited data file and plot images.
+`sample_<i>_fastqc.zip`: Zip archive containing the FastQC report, tab-delimited data file and plot images.
 
 </details>
 
@@ -200,9 +208,9 @@ The pipeline uses in the first place [`samtools sort`](http://www.htslib.org/doc
 <working_directory>/<analysis_name>/samples/sample_<i>
 ```
     
-`*.bam`: file generated by samtools sort, sorting and converting *.sam* file generated by bowtie2 into a *.bam* file.
+`sample_<i>.bam`: file generated by samtools sort, sorting and converting *.sam* file generated by bowtie2 into a *.bam* file.
 
-`*.bam.bai`: file generated by samtools index by indexing *.bam* file.
+`sample_<i>.bam.bai`: file generated by samtools index by indexing *.bam* file.
 
 </details>
 
@@ -370,7 +378,7 @@ These enrichment analyses, both of GO and KEGG, are perfomed using *clusterProfi
   14. Emap plot of enriched celullar component GO terms, generated by *emapplot()*.
   15. Go plot of enriched celullar component GO terms, generated by *goplot()*.
   11. Bar plot of enriched KEGG terms, generated by *batplot()*, showing 10 categories.
-  12. Dot plot of enriched KEGG GO terms, generated by *dotplot()*, showing 10 categories.
+  12. Dot plot of enriched KEGG terms, generated by *dotplot()*, showing 10 categories.
 
 However, it must be taken into account that these plots will only be generated if at least 1 (or 2 for the case of emap and go plots) enriched term, either GO or KEGG, is found.
 
