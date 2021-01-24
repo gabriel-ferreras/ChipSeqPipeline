@@ -219,7 +219,7 @@ As indicated previously in Input parameters section, calling can be done in a br
 <working_directory>/<analysis_name>/results/sample_<i>_result
 ```
     
-`*<analysis_name>_sample_<i>_peaks.xls`: is a tabular file which contains information about called peaks. You can open it in excel and sort/filter using excel functions. It does includes:
+`<analysis_name>_sample_<i>_peaks.xls`: is a tabular file which contains information about called peaks. You can open it in excel and sort/filter using excel functions. It does includes:
 
    * chromosome name
    * start position of peak
@@ -231,7 +231,7 @@ As indicated previously in Input parameters section, calling can be done in a br
    * fold enrichment for this peak summit against random Poisson distribution with local lambda
    * -log10(qvalue) at peak summit
    
-`*<analysis_name>_sample_<i>_peaks.narrowPeak`: contains the peak locations together with peak summit, p-value, and q-value. You can load it to the UCSC genome browser. Definition of some specific columns are:
+`<analysis_name>_sample_<i>_peaks.narrowPeak`: contains the peak locations together with peak summit, p-value, and q-value. You can load it to the UCSC genome browser. Definition of some specific columns are:
 
    * 5th: integer score for display. It's calculated as int(-10*log10pvalue) or int(-10*log10qvalue) depending on whether -p (pvalue) or -q (qvalue) is used as score cutoff. Please note that currently this value might be out of the [0-1000] range defined in UCSC ENCODE narrowPeak format.
    * 7th: fold-change at peak summit
@@ -241,9 +241,9 @@ As indicated previously in Input parameters section, calling can be done in a br
 
 If the pipeline is run in a broad peak mode, this file will be called *<analysis_name>_sample_<i>_peaks.broadPeak*, offering same piece of information, except for 10th column, as this mode will not register peak summits.
 
-`*<analysis_name>_sample_<i>_summits.bed`: file in BED format containing the peak summits locations for every peak. The file can be loaded directly to the UCSC genome browser. This file is useful if you are aimed to find the motifs at the binding sites.
+`<analysis_name>_sample_<i>_summits.bed`: file in BED format containing the peak summits locations for every peak. The file can be loaded directly to the UCSC genome browser. This file is useful if you are aimed to find the motifs at the binding sites.
 
-`*<analysis_name>_sample_<i>_model.r`: R script which you can use to produce a PDF image of the model based on your data. Once the script is run, the PDF will automatically appear in the current directory.
+`<analysis_name>_sample_<i>_model.r`: R script which you can use to produce a PDF image of the model based on your data. Once the script is run, the PDF will automatically appear in the current directory.
 
 </details>
 
