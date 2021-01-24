@@ -133,19 +133,11 @@ The pipeline requires a file as an input to specify the samples and the design o
     
  * **Eligible parameters**:
     - **paired**: indicate whether the samples are from a paired-end sequencing (True/1) or a single-end sequencing (False/0).
-<<<<<<< HEAD
     
       > [`Paired-end sequencing`](https://www.illumina.com/science/technology/next-generation-sequencing/plan-experiments/paired-end-vs-single-read.html) allows users to sequence both ends of a fragment and generate high-quality, alignable sequence data. It produces twice the bumber of reads in the same time and detect insertion-deletion (indel) variants, which is not possible with single-read data.
 
       > [`Single-end sequencing`](https://www.illumina.com/science/technology/next-generation-sequencing/plan-experiments/paired-end-vs-single-read.html) involves sequencing DNA from only one end, delivering large volumes of high-quality data, rapidly and economically.
 
-=======
-       
-       > [`Paired-end sequencing`](https://www.illumina.com/science/technology/next-generation-sequencing/plan-experiments/paired-end-vs-single-read.html) allows users to sequence both ends of a fragment and generate high-quality, alignable sequence data. It produces twice the bumber of reads in the same time and detect insertion-deletion (indel) variants, which is not possible with single-read data.
-       
-       > [`Single-end sequencing`](https://www.illumina.com/science/technology/next-generation-sequencing/plan-experiments/paired-end-vs-single-read.html) involves sequencing DNA from only one end, delivering large volumes of high-quality data, rapidly and economically.
-       
->>>>>>> 70e5770dbcbe78edf5259558bff9a2eec5c43cf8
     - **broad**: indicate whether, in the peak analysis, you prefer to identify broad peaks (True/1) or narrow peaks (False/0). 
        
        > [`MACS2`](https://github.com/macs3-project/MACS) has two different specific methods in searching for enrichment regions. [`Broad peaks`](https://hbctraining.github.io/Intro-to-ChIPseq/lessons/05_peak_calling_macs.html ) or broad domains (i.e. histone modifications that cover entire gene bodies) or [`narrow peaks`](https://hbctraining.github.io/Intro-to-ChIPseq/lessons/05_peak_calling_macs.html ) (i.e. a transcription factor binding). Narrow peaks are easier to detect as we are looking for regions that have higher amplitude and are easier to distinguish from the background, compared to broad or dispersed marks.
