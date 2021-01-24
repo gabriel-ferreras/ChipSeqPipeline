@@ -226,6 +226,15 @@
                 species    = "ath")
     }
  }
+ if (nrow(as.data.frame(kk)) > 0)
+ {
+    barplot(kk, showCategory = 10)
+ }
+ if (nrow(as.data.frame(kk)) > 0)
+ {
+    dotplot(kk, showCategory = 10)
+ }
+
  if (nrow(as.data.frame(kk)) == 0)
  {
     print("")
