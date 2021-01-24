@@ -14,7 +14,7 @@ The pipeline hereby presented was designed in order to perform a complete proces
 
 In this software, **sample** refers to each pair of Chip and control sequencing data that will be compared for the peak determination, and therefore will generate one set of results in the form of peak and summit files, among others. Meanwhile, **experiment** referes to each ChIP-seq analysis conducted, that is, each set of conditions for the inmunoprecipitation of chromatin, as these pipeline allows for the analysis of different experiments for different transcription factors or histone modifications, or different experimental conditions. Each experiment will be composed of one or more sample, these samples being replicates of the same experimental design and conditions. For each experiment the pipeline will generate several global results, such as a list of overlapping genes among replicates and list of enriched GO and KEGG terms. Finally, by **analysis** we refer to the general name of the study, composed of one or more experiments.
 
-For example, one analysis could me made of two experiments for two related transcription factors, and each one of these two experiments could have two biological replicates of the same experimental conditions.
+For example, one analysis could be composed of two experiments for two related transcription factors, and each one of these two experiments could have two biological replicates of the same experimental conditions.
 
 ## Pipeline summary
 
