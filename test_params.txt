@@ -1,7 +1,7 @@
 analysis_name: prr5
 number_samples: 1
 number_experiments: 1
-experimental_design: "( 1 )"
+experimental_design: (1)
 installation_directory: /home/gabfergar/github_repositories/
 working_directory: /home/gabfergar/tmp/ 
 path_annotation: /home/gabfergar/prr5/annotation/chromosome1.gtf

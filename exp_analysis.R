@@ -41,11 +41,13 @@
  
  samples_in_exp <- which(exp_design_vector == experiment)
  exp_all_peaks <- list()
- for (i in samples_in_exp) 
+ for (i in samples_in_exp)
  {
-  exp_all_peaks[i] <- as.vector(read.table(file = paste(analysis_name, "sample", i, "peaks_targetgenes.txt", sep = "_"), header = FALSE))
+  file_name<-paste(analysis_name, "sample", i, "peaks_targetgenes.txt", sep = ">
+  folder<-paste("sample", i, "result", sep="_")
+  path<-paste("..",folder,file_name,sep="/")
+  exp_all_peaks[i] <- as.vector(read.table(file = path, header = FALSE))
  }
-
  
 ## Extracting the overlapping peaks, that is, the potential regulome of the transcription factor:
  
