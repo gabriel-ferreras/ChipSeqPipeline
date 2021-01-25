@@ -8,7 +8,7 @@ Authors:
 
 ## Introduction
 
-The pipeline hereby presented was designed in order to perform a complete processing and analysis of ChIP-seq (Chromatin ImmunopreciPitation sequencing) data from the plant model *Arabidopsis thaliana*. This material is part of the course "Omics technologies and Bioinformatics" given by Francisco J. Romero Campero and Ignacio Pérez Hurtado de Mendoza in the Biochemistry degree at the University of Seville.
+The pipeline hereby presented was designed in order to perform a complete processing and analysis of ChIP-seq (Chromatin ImmunopreciPitation sequencing) data from the plant model *Arabidopsis thaliana*. This material is part of the course "Omics technologies and Bioinformatics" given by Francisco J. Romero Campero and Ignacio Pérez Hurtado de Mendoza in the Biochemistry degree at the University of Seville. This pipeline main coding language is bash (shell), in combination with R for specific steps of the analysis, and SGE for cluster computer management in order to submit parallelizable scripts and therefore optimize the running of the software. However, is you do not have access to a cluster computer system or it does not run on SGE, there is a version of this same repository called [`ChipSeqPipelineBash`](https://github.com/gabriel-ferreras/ChipSeqPipeline) that is run entirely on shell, without parallelization with SGE.
 
 ## Definition of terms used
 
@@ -23,12 +23,12 @@ For example, one analysis could be composed of two experiments for two related t
    * Prepare workspace.
    * Copy the data.
    * Create a genome index ([`bowtie2-build`](http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml)).
-   * Submit chip_sample_processing.sh and control_sample_processing for each sample.
+   * Submit via SGE chip_sample_processing.sh and control_sample_processing for each sample.
  2. **chip_sample_processing.sh** and **control_sample_processing.sh** 
     * Quality control ([`fastqc`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)).
     * Map to reference genome ([`bowtie2`](http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml)).
     * Generate sorted bam file ([`samtools`](http://www.htslib.org)).
-    * Submit peak_determination.sh for each sample.
+    * Submit via SGE peak_determination.sh for each sample.
  3. **peak_determination.sh**
     * Peak determination ([`masc2 callpeak`](https://github.com/macs3-project/MACS)).
     * Peak annotation by submitting *target_genes.R* for each sample.
