@@ -1,5 +1,5 @@
 # ChipSeqPipeline
-Bash pipeline for *Arabidopsis thaliana* Chip-Seq data processing and analysis.
+Bash, SGE and R pipeline for *Arabidopsis thaliana* Chip-Seq data processing and analysis.
 
 Authors: 
   * Antonio Álvarez Gómez
