@@ -55,18 +55,58 @@
  if (length(samples_in_exp) == 1) 
  {
    regulome <- experiment_overlap[[1]]
+   venn.diagram(x = exp_all_peaks, category.names = c("Replicate 1"),
+             filename = 'VennDiagram.png', output=TRUE, col = "transparent",
+             alpha=0.5, fill = c("cornflowerblue"), fontfamily = "sans",
+             cat.col = c("dodgerblue"),
+             cat.cex = 1.3,
+             margin=0.1,
+             cat.fontfamily = "sans",
+             cat.dist=0.1)
  } else if (length(samples_in_exp) == 2) 
  {
    regulome <- experiment_overlap$a3
+   venn.diagram(x = exp_all_peaks, category.names = c("Replicate 1" , "Replicate 2"),
+             filename = 'VennDiagram.png', output=TRUE, col = "transparent",
+             alpha=0.5, fill = c("cornflowerblue", "green"), fontfamily = "sans",
+             cat.col = c("dodgerblue", "seagreen3"),
+             cat.cex = 1.3,
+             margin=0.1,
+             cat.fontfamily = "sans",
+             cat.dist=0.1)
  } else if (length(samples_in_exp) == 3)
  {
    regulome <- experiment_overlap$a5
+   venn.diagram(x = exp_all_peaks, category.names = c("Replicate 1" , "Replicate 2", "Replicate 3"), 
+             filename = 'VennDiagram.png', output=TRUE, col = "transparent",
+             alpha=0.5, fill = c("cornflowerblue", "green", "darkorchid1"), fontfamily = "sans",
+             cat.col = c("dodgerblue", "seagreen3", "orchid3"),
+             cat.cex = 1.3,
+             margin=0.1,
+             cat.fontfamily = "sans",
+             cat.dist=0.1)
  } else if (length(samples_in_exp) == 4)
  {
    regulome <- experiment_overlap$a6
+   venn.diagram(x = exp_all_peaks, category.names = c("Replicate 1" , "Replicate 2", "Replicate 3", "Replicate 4"),
+             filename = 'VennDiagram.png', output=TRUE, col = "transparent",
+             alpha=0.5, fill = c("cornflowerblue", "green", "darkorchid1", "yellow"), fontfamily = "sans",
+             cat.col = c("dodgerblue", "seagreen3", "orchid3","orange"),
+             cat.cex = 1.3,
+             margin=0.1,
+             cat.fontfamily = "sans",
+             cat.dist=0.1)
  } else if (length(samples_in_exp) == 5)
  {
    regulome <- experiment_overlap$a31
+   venn.diagram(x = exp_all_peaks, category.names = c("Replicate 1" , "Replicate 2", "Replicate 3", "Replicate 4", "Replicate 5"),
+             filename = 'VennDiagram.png', output=TRUE, col = "transparent",
+             alpha=0.5, fill = c("cornflowerblue", "green", "darkorchid1", "yellow", "goldenrod1"), fontfamily = "sans",
+             cat.col = c("dodgerblue", "seagreen3", "orchid3","orange", "goldenrod1"),
+             cat.cex = 1.3,
+             margin=0.1,
+             cat.fontfamily = "sans",
+             cat.dist=0.1)
  }
  name<-paste(analysis_name, "experiment", experiment, "overlappinggenes.txt", sep = "_")
  write(x = regulome, file = name)
@@ -96,6 +136,7 @@
  BP_name<-paste(analysis_name, "experiment", experiment, "BP_GOs.txt", sep = "_")
  write.table(BP, file = BP_name, sep = ",")
  
+ pdf(file = "BP_GO_plots.pdf", width = 15, height = 15, onefile=TRUE) 
  if (nrow(as.data.frame(BP)) > 0)
  {
     print("")
@@ -109,11 +150,11 @@
  }
  if (nrow(as.data.frame(BP)) > 0)
  {
-    cnetplot(BP)
+   cnetplot(BP)
  }
  if (nrow(as.data.frame(BP)) > 1)
  {
-    emapplot(BP)
+    #emapplot(BP)
  }
  if (nrow(as.data.frame(BP)) > 1)
  {
@@ -125,7 +166,8 @@
     print("NO BIOLOGICAL PROCESS ENRICHMENT FOUND")
     print("")
  }
- 
+ dev.off()
+
  MF <- enrichGO(gene = regulome,
                 OrgDb = "org.At.tair.db",
                 keyType = "TAIR", 
@@ -134,7 +176,7 @@
  
  MF_name<-paste(analysis_name, "experiment", experiment, "MF_GOs.txt", sep = "_")
  write.table(MF, file = MF_name, sep = ",")
- 
+ pdf(file = "MF_GO_plots.pdf", width = 15, height = 15, onefile=TRUE)
  if (nrow(as.data.frame(MF)) > 0)
  {
     print("")
@@ -152,7 +194,7 @@
  }
  if (nrow(as.data.frame(MF)) > 1)
  {
-    emapplot(MF)
+    #emapplot(MF)
  }
  if (nrow(as.data.frame(MF)) > 1)
  {
@@ -164,7 +206,8 @@
     print("NO MOLECULAR FUNCTION ENRICHMENT FOUND")
     print("")
  }
- 
+ dev.off()
+
  CC <- enrichGO(gene = regulome,
                 OrgDb = "org.At.tair.db",
                 keyType = "TAIR", 
@@ -173,7 +216,7 @@
  
  CC_name<-paste(analysis_name, "experiment", experiment, "CC_GOs.txt", sep = "_")
  write.table(CC, file = CC_name, sep = ",")
- 
+ pdf(file = "CC_GO_plots.pdf", width = 15, height = 15, onefile=TRUE)
  if (nrow(as.data.frame(CC)) > 0)
  {
     print("")
@@ -191,7 +234,7 @@
  }
  if (nrow(as.data.frame(CC)) > 1)
  {
-    emapplot(CC)
+    #emapplot(CC)
  }
  if (nrow(as.data.frame(CC)) > 1)
  {
@@ -203,6 +246,7 @@
     print("NO CELLULAR COMPONENT ENRICHMENT FOUND")
     print("")
  }
+ dev.off()
 
 ## KEGG pathway enrichment:
  
@@ -214,7 +258,7 @@
 
  kk_name<-paste(analysis_name, "experiment", experiment, "KEGGs.txt", sep = "_")
  write.table(kk, file = kk_name, sep = ",")
- 
+ pdf(file = "KEGG_plots.pdf", width = 10, height = 10, onefile=TRUE)
  if (nrow(as.data.frame(kk)) > 0)
  {
     print("")
@@ -243,4 +287,4 @@
     print("NO KEGG ENRICHMENT FOUND")
     print("")
  }
- 
+ dev.off()
