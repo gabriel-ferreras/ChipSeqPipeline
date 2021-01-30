@@ -117,6 +117,8 @@ echo "======================"
 echo "| CREATING WORKSPACE |"
 echo "======================"
 echo ""
+echo "      Making directories"
+
 cd $WORK_DIR
 mkdir $ANALYSIS
 cd $ANALYSIS
@@ -132,6 +134,9 @@ done
 cd ..
 
 #Copying the data.
+echo ""
+echo "      Copying input data from the indicated paths"
+echo ""
 cp $ANNOTATION $WORK_DIR/$ANALYSIS/annotation/annotation.gtf
 cp $GENOME $WORK_DIR/$ANALYSIS/genome/genome.fa
 if [ $PAIRED -eq 0 ]
