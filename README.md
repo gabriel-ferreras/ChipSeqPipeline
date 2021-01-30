@@ -72,8 +72,10 @@ For example, one analysis could be composed of two experiments for two related t
 
 ## Dependencies
 
-For running this pipeline, you need to assure that the following softwares are installed in your computer:
+For running this pipeline, you need to assure that the following softwares are installed in your computer cluster:
 
+  * [`SGE language`](http://gridscheduler.sourceforge.net/)
+> Keep in mind this Pipeline is conceived for a computer cluster system with SGE language, if you are looking for the general pipeline without SGE, go to [`ChipSeqPipelineNoSGE`](https://github.com/gabriel-ferreras/ChipSeqPipelineNoSGE).
   * [`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
   * [`Bowtie2`](http://bowtie-bio.sourceforge.net/bowtie2/index.shtml)
   * [`SAMTOOLS`](https://sourceforge.net/projects/samtools/files/samtools/)
