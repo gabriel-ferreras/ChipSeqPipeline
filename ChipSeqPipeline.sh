@@ -25,7 +25,7 @@ WORK_DIR=$(grep working_directory: $PARAMS | awk '{ print $2 }')
 echo "      Working directory is "$WORK_DIR
 
 ANALYSIS=$(grep analysis_name: $PARAMS | awk '{ print $2 }')
-echo "      Analysis name = "$EXP
+echo "      Analysis name = "$ANALYSIS
 
 NUM_SAMPLES=$(grep number_samples: $PARAMS | awk '{ print $2 }')
 echo "      Number samples = "$NUM_SAMPLES
