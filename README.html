@@ -377,11 +377,11 @@ summary {
 
 <div id="chipseqpipeline" class="section level1">
 <h1>ChipSeqPipeline</h1>
-<p>Bash pipeline for <em>Arabidopsis thaliana</em> Chip-Seq data processing and analysis.</p>
+<p>Bash, SGE and R pipeline for <em>Arabidopsis thaliana</em> Chip-Seq data processing and analysis.</p>
 <p>Authors: * Antonio Álvarez Gómez * Gabriel Ferreras Garrucho * Helena Victoria Cotán</p>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>The pipeline hereby presented was designed in order to perform a complete processing and analysis of ChIP-seq (Chromatin ImmunopreciPitation sequencing) data from the plant model <em>Arabidopsis thaliana</em>. This material is part of the course “Omics technologies and Bioinformatics” given by Francisco J. Romero Campero and Ignacio Pérez Hurtado de Mendoza in the Biochemistry degree at the University of Seville.</p>
+<p>The pipeline hereby presented was designed in order to perform a complete processing and analysis of ChIP-seq (Chromatin ImmunopreciPitation sequencing) data from the plant model <em>Arabidopsis thaliana</em>. This material is part of the course “Omics technologies and Bioinformatics” given by Francisco J. Romero Campero and Ignacio Pérez Hurtado de Mendoza in the Biochemistry degree at the University of Seville. This pipeline main coding language is bash (shell), in combination with R for specific steps of the analysis, and SGE for cluster computer management in order to submit parallelizable scripts and therefore optimize the running of the software. However, is you do not have access to a cluster computer system or it does not run on SGE, there is a version of this same repository called <a href="https://github.com/gabriel-ferreras/ChipSeqPipelineNoSGE"><code>ChipSeqPipelineNoSGE</code></a> that is run entirely on shell, without parallelization with SGE.</p>
 </div>
 <div id="definition-of-terms-used" class="section level2">
 <h2>Definition of terms used</h2>
@@ -397,14 +397,14 @@ summary {
 <li>Prepare workspace.</li>
 <li>Copy the data.</li>
 <li>Create a genome index (<a href="http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml"><code>bowtie2-build</code></a>).</li>
-<li>Submit chip_sample_processing.sh and control_sample_processing for each sample.</li>
+<li>Submit via SGE chip_sample_processing.sh and control_sample_processing for each sample.</li>
 </ul></li>
 <li><strong>chip_sample_processing.sh</strong> and <strong>control_sample_processing.sh</strong>
 <ul>
 <li>Quality control (<a href="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/"><code>fastqc</code></a>).</li>
 <li>Map to reference genome (<a href="http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml"><code>bowtie2</code></a>).</li>
 <li>Generate sorted bam file (<a href="http://www.htslib.org"><code>samtools</code></a>).</li>
-<li>Submit peak_determination.sh for each sample.</li>
+<li>Submit via SGE peak_determination.sh for each sample.</li>
 </ul></li>
 <li><strong>peak_determination.sh</strong>
 <ul>
@@ -460,7 +460,13 @@ summary {
 </div>
 <div id="dependencies" class="section level2">
 <h2>Dependencies</h2>
-<p>For running this pipeline, you need to assure that the following softwares are installed in your computer:</p>
+<p>For running this pipeline, you need to assure that the following softwares are installed in your computer cluster:</p>
+<ul>
+<li><a href="http://gridscheduler.sourceforge.net/"><code>SGE language</code></a></li>
+</ul>
+<blockquote>
+<p>Keep in mind this Pipeline is conceived for a computer cluster system with SGE language, if you are looking for the general pipeline without SGE, go to <a href="https://github.com/gabriel-ferreras/ChipSeqPipelineNoSGE"><code>ChipSeqPipelineNoSGE</code></a>.</p>
+</blockquote>
 <ul>
 <li><a href="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/"><code>FastQC</code></a></li>
 <li><a href="http://bowtie-bio.sourceforge.net/bowtie2/index.shtml"><code>Bowtie2</code></a></li>
@@ -495,6 +501,7 @@ summary {
 <h2>Running pipeline</h2>
 <p>To run the pipeline on your experimental data, first enter the necessary parameters in the spreadsheet file (see Input parameters section), and then from the terminal type:</p>
 <pre class="sh"><code>bash ChipSeqPipeline test_params.txt</code></pre>
+<p>There is an <em>example</em> folder and <em>test_params.txt</em> file in the repository, with some light data that should be analysed fairly quickly, for the user to run the pipeline and check out how it works and the results generated. To conduct this example run, just go to the <em>test_params.txt</em> and change the working and installation directories to your own, as well as the paths to each sample’s chip and control fastq.gz files (just substitute the path until <em>ChipSeqPipelineNoSGE</em> with the installation directory), and then go to the terminal and run <em>bash ChipSeqPipeline test_params.txt</em>.</p>
 <div id="input-parameters" class="section level3">
 <h3>Input parameters</h3>
 <p>The pipeline requires a file as an input to specify the samples and the design of the analysis. Within the repository you can find an example of parameters file (test_params.txt). The parameters you need to include are:</p>
@@ -650,11 +657,14 @@ summary {
 <pre class="bash"><code>&lt;working_directory&gt;/&lt;analysis_name&gt;/results/sample_&lt;i&gt;_result</code></pre>
 <p><code>&lt;analysis_name&gt;_sample_&lt;i&gt;_peak_targetgenes.txt</code>: text file including the genes of <em>Arabidopsis thaliana</em> (TAIR ID) identified as target genes from peaks (<em>.narrowPeak</em> or <em>.broadPeak</em> files).</p>
 <p><code>&lt;analysis_name&gt;_sample_&lt;i&gt;_summit_targetgenes.txt</code>: text file including the genes of <em>Arabidopsis thaliana</em> (TAIR ID) identified as target genes from summits (<em>.bed</em> files).</p>
-<p><code>R.plots</code>: a pdf file including all the plots generated during the sample processing. These plots are, always in this order:</p>
+<p><code>peak_annotation_plots.pdf</code>: a pdf file including all the plots generated during peak annotation. These plots are, always in this order:</p>
 <ol style="list-style-type: decimal">
 <li>Pie plot of the distribution of peaks in different genetic elements, generated by <em>plotAnnoPie()</em>.</li>
 <li>Bar plot of the distribution of peaks in different genetic elements, generated by <em>plotAnnoBar()</em>.</li>
 <li>Distance plot of the distribution of peaks regarding their distance to the TSS, generated by <em>plotDistToTSS()</em>.</li>
+</ol>
+<p><code>summit_annotation_plots.pdf</code>: a pdf file including all the plots generated during summit annotation. These plots are, always in this order:</p>
+<ol style="list-style-type: decimal">
 <li>Pie plot of the distribution of summits in different genetic elements, generated by <em>plotAnnoPie()</em>.</li>
 <li>Bar plot of the distribution of summits in different genetic elements, generated by <em>plotAnnoBar()</em>.</li>
 <li>Distance plot of the distribution of summits regarding their distance to the TSS, generated by <em>plotDistToTSS()</em>.</li>
@@ -669,6 +679,7 @@ summary {
 <p><summary>Output files</summary></p>
 <pre class="bash"><code>&lt;working_directory&gt;/&lt;analysis_name&gt;/results/exp_&lt;j&gt;_result</code></pre>
 <p><code>&lt;analysis_name&gt;_experiment_&lt;j&gt;_overlappinggenes.txt</code>: text file containing the overlapping genes that constitute the determined potential regulome of the transcription factor.</p>
+<p><code>VennDiagram.png</code>: high resolution png file containing the venn diagram resulting from the overlap of target genes from each replicate.</p>
 </details>
 </div>
 <div id="gene-ontology-enrichment-go-and-kyoto-encycopedia-of-genes-and-genomes-kegg" class="section level4">
@@ -687,27 +698,16 @@ summary {
 <p><code>&lt;analysis_name&gt;_experiment_&lt;j&gt;_MF_GOs.txt</code>: text file containing the enriched molecular function GO terms found for the overlapping target gene list. Could be empty if no enriched terms are found.</p>
 <p><code>&lt;analysis_name&gt;_experiment_&lt;j&gt;_CC_GOs.txt</code>: text file containing the enriched celullar component GO terms found for the overlapping target gene list. Could be empty if no enriched terms are found.</p>
 <p><code>&lt;analysis_name&gt;_experiment_&lt;j&gt;_KEGGs.txt</code>: text file containing the enriched KEGG terms found for the overlapping target gene list. Could be empty if no enriched terms are found.</p>
-<p><code>R.plots</code>: a pdf file including all the plots generated during the enrichment analysis. These plots are, always in this order:</p>
-<ol style="list-style-type: decimal">
-<li>Bar plot of enriched biological process GO terms, generated by <em>batplot()</em>, showing 20 categories.</li>
-<li>Dot plot of enriched biological process GO terms, generated by <em>dotplot()</em>, showing 20 categories.</li>
-<li>Cnet plot of enriched biological process GO terms, generated by <em>cnetplot()</em>.</li>
-<li>Emap plot of enriched biological process GO terms, generated by <em>emapplot()</em>.</li>
-<li>Go plot of enriched biological process GO terms, generated by <em>goplot()</em>.</li>
-<li>Bar plot of enriched molecular function GO terms, generated by <em>batplot()</em>, showing 20 categories.</li>
-<li>Dot plot of enriched molecular function GO terms, generated by <em>dotplot()</em>, showing 20 categories.</li>
-<li>Cnet plot of enriched molecular function GO terms, generated by <em>cnetplot()</em>.</li>
-<li>Emap plot of enriched molecular function GO terms, generated by <em>emapplot()</em>.</li>
-<li>Go plot of enriched molecular function GO terms, generated by <em>goplot()</em>.</li>
-<li>Bar plot of enriched celullar component GO terms, generated by <em>batplot()</em>, showing 20 categories.</li>
-<li>Dot plot of enriched celullar component GO terms, generated by <em>dotplot()</em>, showing 20 categories.</li>
-<li>Cnet plot of enriched celullar component GO terms, generated by <em>cnetplot()</em>.</li>
-<li>Emap plot of enriched celullar component GO terms, generated by <em>emapplot()</em>.</li>
-<li>Go plot of enriched celullar component GO terms, generated by <em>goplot()</em>.</li>
-<li>Bar plot of enriched KEGG terms, generated by <em>batplot()</em>, showing 10 categories.</li>
-<li>Dot plot of enriched KEGG terms, generated by <em>dotplot()</em>, showing 10 categories.</li>
-</ol>
-<p>However, it must be taken into account that these plots will only be generated if at least 1 (or 2 for the case of emap and go plots) enriched term, either GO or KEGG, is found.</p>
+<p><code>BP_GO_plots_1.pdf</code>: a pdf file including bar and dot plots of enriched biological process GO terms, generated by <em>batplot()</em> and <em>dotplot()</em> respectively, showing 20 categories, both sized 7x7.</p>
+<p><code>BP_GO_plots_2.pdf</code>: a pdf file including cnet and go plots of enriched biological process GO terms, generated by <em>cnetplot()</em> and <em>goplot()</em> respectively, showing 20 categories, both sized 15x15.</p>
+<p><code>MF_GO_plots_1.pdf</code>: a pdf file including bar and dot plots of enriched molecular function GO terms, generated by <em>batplot()</em> and <em>dotplot()</em> respectively, showing 20 categories, both sized 10x7.</p>
+<p><code>MF_GO_plots_2.pdf</code>: a pdf file including cnet and go plots of enriched molecular function GO terms, generated by <em>cnetplot()</em> and <em>goplot()</em> respectively, showing 20 categories, both sized 15x15.</p>
+<p><code>CC_GO_plots_1.pdf</code>: a pdf file including bar and dot plots of enriched cellular component GO terms, generated by <em>batplot()</em> and <em>dotplot()</em> respectively, showing 20 categories, both sized 7x7.</p>
+<p><code>CC_GO_plots_2.pdf</code>: a pdf file including cnet and go plots of enriched cellular component GO terms, generated by <em>cnetplot()</em> and <em>goplot()</em> respectively, showing 20 categories, both sized 15x15.</p>
+<p><code>KEGG_plots.pdf</code>: a pdf file including bar and dot plots of enriched KEGG terms, generated by <em>batplot()</em> and <em>dotplot()</em> respectively, showing 10 categories, both sized 7x7.</p>
+<blockquote>
+<p>It must be taken into account that these plots will only be generated if at least 1 (or 2 for the case of go plots) enriched terms, either GO or KEGG, is found. If no plot is generated, the pdf file with be blank and not openable.</p>
+</blockquote>
 <p><code>ath&lt;KEGG_ID&gt;.png</code>: a png file with the general representation of the KEGG pathway, one for each enriched KEGG pathway identified.</p>
 <p><code>ath&lt;KEGG_ID&gt;.pathview.png</code>: a png file with the representation of the KEGG pathway, indicating via color coding the enriched genes found in the analysis, one for each enriched KEGG pathway identified.</p>
 <p><code>ath&lt;KEGG_ID&gt;.xml</code>: a png file containing the information neccesary for the KEGG pathway representation by pathview.</p>
