@@ -112,6 +112,7 @@ To run the pipeline on your experimental data, first enter the necessary paramet
 ```sh
 bash ChipSeqPipeline test_params.txt
 ```
+There is an *example* folder and *test_params.txt* file in the repository, with some light data that should be analysed fairly quickly, for the user to run the pipeline and check out how it works and the results generated. To conduct this example run, just go to the *test_params.txt* and change the working and installation directories to your own, as well as the paths to each sample's chip and control fastq.gz files (just substitute the path until *ChipSeqPipelineNoSGE* with the installation directory), and then go to the terminal and run *bash ChipSeqPipeline test_params.txt*.
 
 ### Input parameters
 
