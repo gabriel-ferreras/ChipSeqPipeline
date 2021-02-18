@@ -133,8 +133,8 @@ The pipeline requires a file as an input to specify the samples and the design o
  * **Paths**:
     - **path_annotation**: the path to where the annotation (in gtf format) is placed, including the file.
     - **path_genome**: the path to where the reference genome (in fasta format) is placed, including the file.
-    - **path_chip_1**: the path to where the chip samples (in fastq.gz format) are placed, including the file. If there are more than one samples, you must also indicate the path to those by adding a parameter called "path_chip_i", where "i" stands for the number of the sample.
-    - **path_control_1**: the path to where the control samples (in fastq.gz format) are placed, including the file. If there are more than one sampls, you must also indicate the path to those by adding a parameter called "path_control_i", where "i" stands for the number of the sample.
+    - **path_chip_1**: the path to where the chip samples (in fastq.gz format) are placed, including the file. If there are more than one samples, you must also indicate the path to those by adding a parameter called "path_chip_i", where "i" stands for the number of the sample. If the sequencing data is paired, you will have to include the paths to each fastq.gz file for each chip sample as "path_chip_i_1" and "path_chip_i_2".
+    - **path_control_1**: the path to where the control samples (in fastq.gz format) are placed, including the file. If there are more than one sampls, you must also indicate the path to those by adding a parameter called "path_control_i", where "i" stands for the number of the sample. If the sequencing data is paired, you will have to include the paths to each fastq.gz file for each control sample as "path_chip_i_1" and "path_chip_i_2".
     
  * **Eligible parameters**:
     - **paired**: indicate whether the samples are from a paired-end sequencing (True/1) or a single-end sequencing (False/0).
