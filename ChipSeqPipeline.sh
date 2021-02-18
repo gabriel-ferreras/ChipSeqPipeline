@@ -88,28 +88,33 @@ then
 else
 	CHIPS=()
         i=0
-        while [ $i -lt $NUM_SAMPLES ]
+	j=1
+        while [ $j -le $NUM_SAMPLES ]
         do
-                j=$(( $i + 1 ))
                 CHIPS[$i]=$(grep path_chip_${j}_1: $PARAMS | awk '{ print $2 }')
                 echo "      Chip $j paired 1 in ${CHIPS[$i]}"
-		CHIPS[$j]=$(grep path_chip_${j}_2: $PARAMS | awk '{ print $2 }')
-                echo "      Chip $j paired 2 in ${CHIPS[$j]}"
-                i=$(( $i + 2 ))
+		((i++))
+		CHIPS[$i]=$(grep path_chip_${j}_2: $PARAMS | awk '{ print $2 }')
+                echo "      Chip $j paired 2 in ${CHIPS[$i]}"
+                ((i++))
+		((j++))
         done
 
         CONTROLS=()
         i=0
-        while [ $i -lt $NUM_SAMPLES ]
+	j=1
+        while [ $j -le $NUM_SAMPLES ]
         do
-                j=$(( $i + 1 ))
                 CONTROLS[$i]=$(grep path_control_${j}_1: $PARAMS | awk '{ print $2 }')
                 echo "      Control $j paired 1 in ${CONTROLS[$i]}"
-		CONTROLS[$j]=$(grep path_control_${j}_2: $PARAMS | awk '{ print $2 }')
-                echo "      Control $j paired 2 in ${CONTROLS[$j]}"
-                i=$(( $i + 2 ))
+		((i++))
+		CONTROLS[$i]=$(grep path_control_${j}_2: $PARAMS | awk '{ print $2 }')
+                echo "      Control $j paired 2 in ${CONTROLS[$i]}"
+                ((i++))
+		((j++))
         done
 fi
+
 
 #Preparing working workspace.
 echo ""
@@ -150,16 +155,17 @@ then
         	((i++))
 	done
 else
-	echo "UNPAIRED"
 	i=1
+	j=0
         while [ $i -le $NUM_SAMPLES ]
         do
-                j=$((i - 1))
                 cp ${CHIPS[j]} $WORK_DIR/$ANALYSIS/samples/chip_$i/chip_${i}_1.fastq.gz
                 cp ${CONTROLS[j]} $WORK_DIR/$ANALYSIS/samples/control_$i/control_${i}_1.fastq.gz
+		((j++))
                 cp ${CHIPS[i]} $WORK_DIR/$ANALYSIS/samples/chip_$i/chip_${i}_2.fastq.gz
                 cp ${CONTROLS[i]} $WORK_DIR/$ANALYSIS/samples/control_$i/control_${i}_2.fastq.gz
-		i=$(( $i + 2 ))
+		((j++))
+		((i++))
         done
 
 fi
