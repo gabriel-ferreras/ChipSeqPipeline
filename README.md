@@ -1,10 +1,11 @@
 # ChipSeqPipeline
 Bash, SGE and R pipeline for *Arabidopsis thaliana* Chip-Seq data processing and analysis.
 
-Authors: 
-  * Antonio Álvarez Gómez
-  * Gabriel Ferreras Garrucho
-  * Helena Victoria Cotán
+Authors:
+
+* Antonio Álvarez Gómez
+* Gabriel Ferreras Garrucho
+* Helena Victoria Cotán
 
 ## Introduction
 

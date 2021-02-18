@@ -378,7 +378,12 @@ summary {
 <div id="chipseqpipeline" class="section level1">
 <h1>ChipSeqPipeline</h1>
 <p>Bash, SGE and R pipeline for <em>Arabidopsis thaliana</em> Chip-Seq data processing and analysis.</p>
-<p>Authors: * Antonio Álvarez Gómez * Gabriel Ferreras Garrucho * Helena Victoria Cotán</p>
+<p>Authors:</p>
+<ul>
+<li>Antonio Álvarez Gómez</li>
+<li>Gabriel Ferreras Garrucho</li>
+<li>Helena Victoria Cotán</li>
+</ul>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
 <p>The pipeline hereby presented was designed in order to perform a complete processing and analysis of ChIP-seq (Chromatin ImmunopreciPitation sequencing) data from the plant model <em>Arabidopsis thaliana</em>. This material is part of the course “Omics technologies and Bioinformatics” given by Francisco J. Romero Campero and Ignacio Pérez Hurtado de Mendoza in the Biochemistry degree at the University of Seville. This pipeline main coding language is bash (shell), in combination with R for specific steps of the analysis, and SGE for cluster computer management in order to submit parallelizable scripts and therefore optimize the running of the software. However, is you do not have access to a cluster computer system or it does not run on SGE, there is a version of this same repository called <a href="https://github.com/gabriel-ferreras/ChipSeqPipelineNoSGE"><code>ChipSeqPipelineNoSGE</code></a> that is run entirely on shell, without parallelization with SGE.</p>
@@ -522,8 +527,8 @@ summary {
 <ul>
 <li><strong>path_annotation</strong>: the path to where the annotation (in gtf format) is placed, including the file.</li>
 <li><strong>path_genome</strong>: the path to where the reference genome (in fasta format) is placed, including the file.</li>
-<li><strong>path_chip_1</strong>: the path to where the chip samples (in fastq.gz format) are placed, including the file. If there are more than one samples, you must also indicate the path to those by adding a parameter called “path_chip_i”, where “i” stands for the number of the sample.</li>
-<li><strong>path_control_1</strong>: the path to where the control samples (in fastq.gz format) are placed, including the file. If there are more than one sampls, you must also indicate the path to those by adding a parameter called “path_control_i”, where “i” stands for the number of the sample.</li>
+<li><strong>path_chip_1</strong>: the path to where the chip samples (in fastq.gz format) are placed, including the file. If there are more than one samples, you must also indicate the path to those by adding a parameter called “path_chip_i”, where “i” stands for the number of the sample. If the sequencing data is paired, you will have to include the paths to each fastq.gz file for each chip sample as “path_chip_i_1” and “path_chip_i_2”.</li>
+<li><strong>path_control_1</strong>: the path to where the control samples (in fastq.gz format) are placed, including the file. If there are more than one sampls, you must also indicate the path to those by adding a parameter called “path_control_i”, where “i” stands for the number of the sample. If the sequencing data is paired, you will have to include the paths to each fastq.gz file for each control sample as “path_chip_i_1” and “path_chip_i_2”.</li>
 </ul></li>
 <li><strong>Eligible parameters</strong>:
 <ul>
