@@ -1,3 +1,8 @@
+---
+output:
+  html_document: default
+  pdf_document: default
+---
 # ChipSeqPipeline
 Bash, SGE and R pipeline for *Arabidopsis thaliana* Chip-Seq data processing and analysis.
 
@@ -239,27 +244,29 @@ As indicated previously in Input parameters section, calling can be done in a br
     
 `<analysis_name>_sample_<i>_peaks.xls`: is a tabular file which contains information about called peaks. You can open it in excel and sort/filter using excel functions. It does includes:
 
-   * chromosome name
-   * start position of peak
-   * end position of peak
-   * length of peak region
-   * absolute peak summit position
-   * pileup height at peak summit
-   * -log10(pvalue) for the peak summit (e.g. pvalue =1e-10, then this value should be 10)
-   * fold enrichment for this peak summit against random Poisson distribution with local lambda
-   * -log10(qvalue) at peak summit
+* chromosome name
+* start position of peak
+* end position of peak
+* length of peak region
+* absolute peak summit position
+* pileup height at peak summit
+* -log10(pvalue) for the peak summit (e.g. pvalue =1e-10, then this value should be 10)
+* fold enrichment for this peak summit against random Poisson distribution with local lambda
+* -log10(qvalue) at peak summit
    
 `<analysis_name>_sample_<i>_peaks.narrowPeak`: contains the peak locations together with peak summit, p-value, and q-value. You can load it to the UCSC genome browser. Definition of some specific columns are:
 
-   * 5th: integer score for display. It's calculated as int(-10·log10pvalue) or int(-10·log10qvalue) depending on whether -p (pvalue) or -q (qvalue) is used as score cutoff. Please note that currently this value might be out of the [0-1000] range defined in UCSC ENCODE narrowPeak format.
-   * 7th: fold-change at peak summit
-   * 8th: -log10pvalue at peak summit
-   * 9th: -log10qvalue at peak summit
-   * 10th: relative summit position to peak start
+* 5th: integer score for display. It's calculated as int(-10·log10pvalue) or int(-10·log10qvalue) depending on whether -p (pvalue) or -q (qvalue) is used as score cutoff. Please note that currently this value might be out of the [0-1000] range defined in UCSC ENCODE narrowPeak format.
+* 7th: fold-change at peak summit
+* 8th: -log10pvalue at peak summit
+* 9th: -log10qvalue at peak summit
+* 10th: relative summit position to peak start
 
 If the pipeline is run in a broad peak mode, this file will be called `<analysis_name>_sample_<i>_peaks.broadPeak`, offering same piece of information, except for 10th column, as this mode will not register peak summits.
 
 `<analysis_name>_sample_<i>_summits.bed`: file in BED format containing the peak summits locations for every peak. The file can be loaded directly to the UCSC genome browser. This file is useful if you are aimed to find the motifs at the binding sites.
+
+>Note that this file will only be generated if running in narrow peak mode, as broad peak determination does not generate a bed file.
 
 `<analysis_name>_sample_<i>_model.r`: R script which you can use to produce a PDF image of the model based on your data. Once the script is run, the PDF will automatically appear in the current directory.
 
@@ -270,6 +277,9 @@ If the pipeline is run in a broad peak mode, this file will be called `<analysis
 [`HOMER`](http://homer.ucsd.edu/homer/index.html) (Hypergeometric Optimization of Motif EnRichment) is a suite of tools for Motif Discovery and next-generation sequencing analysis. It contains a novel motif discovery algorithm that was designed for regulatory element analysis in genomics applications. It is a differential motif discovery algorithm, which means that it takes two sets of sequences and tries to identify the regulatory elements that are specifically enriched in on set relative to the other.
 
 There are several workflows for running motif analysis with [`HOMER`](http://homer.ucsd.edu/homer/index.html). The one used in this pipeline is [`findMotifsGenome.pl`](http://homer.ucsd.edu/homer/ngs/peakMotifs.html), which manage all the steps for discovering motifs in genomic regions. By default, this will perform de novo motif discovery as well as check the enrichment of known motifs.
+
+> However, it is important to remark that this software requires a summit bed file, that is only generated during narrow peak calling, so if the pipeline is run on broad mode this step does not take place, and there are no results.
+
 
 <details markdown="1">
     <summary>Output files</summary>
@@ -304,7 +314,7 @@ There are several workflows for running motif analysis with [`HOMER`](http://hom
 
 The criteria selected for the determination of target genes (that is, the potential regulome of the transcription factor) is Nearest Downstream Gene (NDG), associating to each peak its nearest downstream gene. This is based on the assumption that transcription factors usually bind to promoters, that is, 5' of the regulated gene. Among the two genes on each strand, the closest one is chosen as the target gene. 
 
-This peak annotation is applied both to the peaks (either *.narrowPeak* or *.broadPeak* files) and the summits (*.bed* files). Apart from the determination of target genes, several visualization functions are implemented to summarize the findings of the analysis.
+This peak annotation is applied both to the peaks (either *.narrowPeak* or *.broadPeak* files) and, in the case of narrow peaks, also to the summits (*.bed* files). Apart from the determination of target genes, several visualization functions are implemented to summarize the findings of the analysis.
 
 <details markdown="1">
     <summary>Output files</summary>
@@ -328,6 +338,8 @@ This peak annotation is applied both to the peaks (either *.narrowPeak* or *.bro
   1. Pie plot of the distribution of summits in different genetic elements, generated by *plotAnnoPie()*.
   2. Bar plot of the distribution of summits in different genetic elements, generated by *plotAnnoBar()*.
   3. Distance plot of the distribution of summits regarding their distance to the TSS, generated by *plotDistToTSS()*.
+
+> Note that this file will only be generated if running on narrow peak mode.
 
 </details>
 

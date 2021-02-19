@@ -154,7 +154,7 @@ print("")
  pdf(file = "BP_GO_plots_2.pdf", width = 15, height = 15, onefile=TRUE)
  if (nrow(as.data.frame(BP)) > 0)
  {
-   cnetplot(BP)
+   cnetplot(BP, node_label="gene")
  }
  if (nrow(as.data.frame(BP)) > 1)
  {
@@ -196,7 +196,7 @@ print("")
  pdf(file = "MF_GO_plots_2.pdf", width = 15, height = 15, onefile=TRUE)
  if (nrow(as.data.frame(MF)) > 0)
  {
-    cnetplot(MF)
+    cnetplot(MF, node_label="gene")
  }
  if (nrow(as.data.frame(MF)) > 1)
  {
@@ -238,7 +238,7 @@ print("")
  pdf(file = "CC_GO_plots_2.pdf", width = 15, height = 15, onefile=TRUE)
  if (nrow(as.data.frame(CC)) > 0)
  {
-    cnetplot(CC)
+    cnetplot(CC, node_label="gene")
  }
  if (nrow(as.data.frame(CC)) > 1)
  {

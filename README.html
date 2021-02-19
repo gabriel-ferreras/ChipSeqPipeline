@@ -607,8 +607,7 @@ summary {
 <pre class="bash"><code>&lt;working_directory&gt;/&lt;analysis_name&gt;/results/sample_&lt;i&gt;_result</code></pre>
 <p><code>&lt;analysis_name&gt;_sample_&lt;i&gt;_peaks.xls</code>: is a tabular file which contains information about called peaks. You can open it in excel and sort/filter using excel functions. It does includes:</p>
 <ul>
-<li>chromosome name
-<ul>
+<li>chromosome name</li>
 <li>start position of peak</li>
 <li>end position of peak</li>
 <li>length of peak region</li>
@@ -617,20 +616,20 @@ summary {
 <li>-log10(pvalue) for the peak summit (e.g. pvalue =1e-10, then this value should be 10)</li>
 <li>fold enrichment for this peak summit against random Poisson distribution with local lambda</li>
 <li>-log10(qvalue) at peak summit</li>
-</ul></li>
 </ul>
 <p><code>&lt;analysis_name&gt;_sample_&lt;i&gt;_peaks.narrowPeak</code>: contains the peak locations together with peak summit, p-value, and q-value. You can load it to the UCSC genome browser. Definition of some specific columns are:</p>
 <ul>
-<li>5th: integer score for display. It’s calculated as int(-10·log10pvalue) or int(-10·log10qvalue) depending on whether -p (pvalue) or -q (qvalue) is used as score cutoff. Please note that currently this value might be out of the [0-1000] range defined in UCSC ENCODE narrowPeak format.
-<ul>
+<li>5th: integer score for display. It’s calculated as int(-10·log10pvalue) or int(-10·log10qvalue) depending on whether -p (pvalue) or -q (qvalue) is used as score cutoff. Please note that currently this value might be out of the [0-1000] range defined in UCSC ENCODE narrowPeak format.</li>
 <li>7th: fold-change at peak summit</li>
 <li>8th: -log10pvalue at peak summit</li>
 <li>9th: -log10qvalue at peak summit</li>
 <li>10th: relative summit position to peak start</li>
-</ul></li>
 </ul>
 <p>If the pipeline is run in a broad peak mode, this file will be called <code>&lt;analysis_name&gt;_sample_&lt;i&gt;_peaks.broadPeak</code>, offering same piece of information, except for 10th column, as this mode will not register peak summits.</p>
 <p><code>&lt;analysis_name&gt;_sample_&lt;i&gt;_summits.bed</code>: file in BED format containing the peak summits locations for every peak. The file can be loaded directly to the UCSC genome browser. This file is useful if you are aimed to find the motifs at the binding sites.</p>
+<blockquote>
+<p>Note that this file will only be generated if running in narrow peak mode, as broad peak determination does not generate a bed file.</p>
+</blockquote>
 <p><code>&lt;analysis_name&gt;_sample_&lt;i&gt;_model.r</code>: R script which you can use to produce a PDF image of the model based on your data. Once the script is run, the PDF will automatically appear in the current directory.</p>
 </details>
 </div>
@@ -638,6 +637,9 @@ summary {
 <h4>Motifs finding</h4>
 <p><a href="http://homer.ucsd.edu/homer/index.html"><code>HOMER</code></a> (Hypergeometric Optimization of Motif EnRichment) is a suite of tools for Motif Discovery and next-generation sequencing analysis. It contains a novel motif discovery algorithm that was designed for regulatory element analysis in genomics applications. It is a differential motif discovery algorithm, which means that it takes two sets of sequences and tries to identify the regulatory elements that are specifically enriched in on set relative to the other.</p>
 <p>There are several workflows for running motif analysis with <a href="http://homer.ucsd.edu/homer/index.html"><code>HOMER</code></a>. The one used in this pipeline is <a href="http://homer.ucsd.edu/homer/ngs/peakMotifs.html"><code>findMotifsGenome.pl</code></a>, which manage all the steps for discovering motifs in genomic regions. By default, this will perform de novo motif discovery as well as check the enrichment of known motifs.</p>
+<blockquote>
+<p>However, it is important to remark that this software requires a summit bed file, that is only generated during narrow peak calling, so if the pipeline is run on broad mode this step does not take place, and there are no results.</p>
+</blockquote>
 <details>
 <p><summary>Output files</summary></p>
 <pre class="bash"><code>&lt;working_directory&gt;/&lt;analysis_name&gt;/results/sample_&lt;i&gt;_result/motifs_sample&lt;i&gt;</code></pre>
@@ -656,7 +658,7 @@ summary {
 <h4>Association of the peaks to target genes</h4>
 <p><a href="https://bioconductor.org/packages/release/bioc/html/ChIPseeker.html"><code>ChIPseeker</code></a> is a package that implements the functions necessary for retrieving the nearest genes around the peak, annotate genomic region of the peak and estimate the significance of overlap among ChIP peak data sets, among other functions.</p>
 <p>The criteria selected for the determination of target genes (that is, the potential regulome of the transcription factor) is Nearest Downstream Gene (NDG), associating to each peak its nearest downstream gene. This is based on the assumption that transcription factors usually bind to promoters, that is, 5’ of the regulated gene. Among the two genes on each strand, the closest one is chosen as the target gene.</p>
-<p>This peak annotation is applied both to the peaks (either <em>.narrowPeak</em> or <em>.broadPeak</em> files) and the summits (<em>.bed</em> files). Apart from the determination of target genes, several visualization functions are implemented to summarize the findings of the analysis.</p>
+<p>This peak annotation is applied both to the peaks (either <em>.narrowPeak</em> or <em>.broadPeak</em> files) and, in the case of narrow peaks, also to the summits (<em>.bed</em> files). Apart from the determination of target genes, several visualization functions are implemented to summarize the findings of the analysis.</p>
 <details>
 <p><summary>Output files</summary></p>
 <pre class="bash"><code>&lt;working_directory&gt;/&lt;analysis_name&gt;/results/sample_&lt;i&gt;_result</code></pre>
@@ -674,6 +676,9 @@ summary {
 <li>Bar plot of the distribution of summits in different genetic elements, generated by <em>plotAnnoBar()</em>.</li>
 <li>Distance plot of the distribution of summits regarding their distance to the TSS, generated by <em>plotDistToTSS()</em>.</li>
 </ol>
+<blockquote>
+<p>Note that this file will only be generated if running on narrow peak mode.</p>
+</blockquote>
 </details>
 </div>
 <div id="determination-of-the-potentital-regulome-of-the-transcription-factor" class="section level4">
